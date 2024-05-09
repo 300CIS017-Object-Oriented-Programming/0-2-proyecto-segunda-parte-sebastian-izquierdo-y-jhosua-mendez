@@ -18,7 +18,7 @@ class View():
         if 'controlador' not in st.session_state: #Controlador de la logica NO TOCAR
             st.session_state['controlador'] = Controlador()
 
-        if 'controller_view' not in st.session_state: #Controlador de la vista NO TOCAR
+        if 'cont_view' not in st.session_state: #Controlador de la vista NO TOCAR
             st.session_state['cont_view'] = Controller_view()
 
     # agrega un evento tipo bar a la lista de eventos -- funcional
