@@ -1,14 +1,17 @@
 class Controller_view():
     def __init__(self):
-        self.controlador = False
+        self.menu = True
         self.agregando_items = False
         self.creando_evento = False
         self.comprando = False
         self.reset = False
         self.modificando = False
+        self.formulario_cliente = False
 
-    def activate_controlador(self):
-        self.controlador = True
+    def activate_formulario_cliente(self):
+        self.formulario_cliente = True
+    def activate_menu(self):
+        self.menu = True
     def activate_agregando_items(self):
         self.agregando_items = True
     def activate_creando_evento(self):
@@ -20,22 +23,26 @@ class Controller_view():
     def activate_modificando(self):
         self.modificando = True
 
-    def deactivate_controlador(self):
-        self.controlador = False
-    def deactivate_agregando_items(self):
+    def desactivate_formulario_cliente(self):
+        self.formulario_cliente = False
+    def desactivate_menu(self):
+        self.menu = False
+    def desactivate_agregando_items(self):
         self.agregando_items = False
-    def deactivate_creando_evento(self):
+    def desactivate_creando_evento(self):
         self.creando_evento = False
-    def deactivate_comprando(self):
+    def desactivate_comprando(self):
         self.comprando = False
-    def deactivate_reset(self):
+    def desactivate_reset(self):
         self.reset = False
-    def deactivate_modificando(self):
+    def desactivate_modificando(self):
         self.modificando = False
 
 
-    def get_controlador(self):
-        return self.controlador
+    def get_formulario_cliente(self):
+        return self.formulario_cliente
+    def get_menu(self):
+        return self.menu
     def get_agregando_items(self):
         return self.agregando_items
     def get_creando_evento(self):

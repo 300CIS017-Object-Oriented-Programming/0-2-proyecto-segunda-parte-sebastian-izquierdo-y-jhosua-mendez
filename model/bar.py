@@ -31,10 +31,13 @@ class Bar(Evento):
     def set_utilidad_artista(self, utilidad_artista):
         self._utilidad_artista = utilidad_artista
 
-    def comprar_boletas(self, nombre_categoria, cantidad):
-        if(super().get_aforo() >= cantidad):
-            self.add_utilidad(self._boleteria.get_precio_categoria(nombre_categoria), cantidad)
-            self._boleteria.comprar_boleta(nombre_categoria, cantidad)
+    def comprar_boletas(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago):
+        ans = False
+        if super().get_aforo() >= cantidad_boletas:
+            self.add_utilidad(self._boleteria.get_precio_categoria(nombre_categoria), cantidad_boletas)
+            self._boleteria.comprar_boleta(nombre_categoria, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago)
+            ans = True
+        return ans
 
     def add_utilidad(self, cantidad , cantidad_boletas):
         comision_bar = 0.20

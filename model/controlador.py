@@ -85,3 +85,11 @@ class Controlador:
         for evento in self.eventos:
             if evento.get_nombre() == evento_seleccionado:
                 return evento.obtener_precio_categoria(categoria_seleccionada)
+
+    def comprar_boletas(self, evento_seleccionado, categoria_seleccionada, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago):
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                ans = evento.comprar_boletas(categoria_seleccionada, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago)
+            if ans:
+                pass #pdf aqui
+        return ans

@@ -57,31 +57,19 @@ class Tiqueteria():
             valor = self._categoria[nombre_categoria]
             print(f"Categoria: {nombre_categoria} Precio : {valor}")
 
-    def comprar_boleta(self, nombre_categoria, cantidad_boletas):
-        flag = False
-        if nombre_categoria not in self._categoria.keys():
-            print("Categoria inexistente")
+    def comprar_boleta(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago):
+        precio_boleta = self._categoria[nombre_categoria]
+        if self._etapa == "Preventa":
+            self._venta_preventa += precio_boleta
+            self._ingresos_totales += precio_boleta
+        elif self._etapa == "Regular":
+            self._venta_regular += precio_boleta
+            self._ingresos_totales += precio_boleta
+        self.agregar_cliente(Cliente(id_cliente, nombre_cliente, apellido_cliente, telefono_cliente, como_se_entero, nombre_categoria, metodo_pago))
+        if metodo_pago == "Efectivo":
+            self.agregar_boleta_efectivo(nombre_categoria, cantidad_boletas)
         else:
-            flag = True
-        if (flag):
-            precio_boleta = self._categoria[nombre_categoria]
-            if self._etapa == "PREVENTA":
-                self._venta_preventa += precio_boleta
-                self._ingresos_totales += precio_boleta
-            elif self._etapa == "REGULAR":
-                self._venta_regular += precio_boleta
-                self._ingresos_totales += precio_boleta
-            metodo_pago = input("Por favor, informe el metodo pago Efectivo o Tarjeta: ")
-            nombre = input("Digite su nombre: ")
-            apellido = input("Digite su apellido: ")
-            id = input("Digite su id: ")
-            telefono = input("Digite el telefono: ")
-            como_se_entero = input("Digite su como se entero: ")
-            self.agregar_cliente(Cliente(id, nombre, apellido, telefono, como_se_entero, nombre_categoria, metodo_pago))
-            if metodo_pago == "Efectivo":
-                self.agregar_boleta_efectivo(nombre_categoria, cantidad_boletas)
-            else:
-                self.agregar_boleta_tarjeta(nombre_categoria, cantidad_boletas)
+            self.agregar_boleta_tarjeta(nombre_categoria, cantidad_boletas)
 
     def mostrar_clientes(self):
         print("Reporte de todos los clientes")

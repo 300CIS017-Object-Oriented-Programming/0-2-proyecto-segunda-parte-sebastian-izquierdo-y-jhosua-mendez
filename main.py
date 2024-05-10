@@ -10,6 +10,6 @@ def main():
         initial_sidebar_state="auto")
     # Contenido de la aplicación
     control = view.View()
-    control.menu_principal()
+    control.funciones_vista()
     return 0
 main()
