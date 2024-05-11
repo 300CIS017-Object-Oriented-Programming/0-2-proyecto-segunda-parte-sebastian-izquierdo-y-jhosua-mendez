@@ -5,9 +5,11 @@ from model.filantropico import Filantropico
 from model.artista import Artista
 from model.tiqueteria import Tiqueteria
 from model.cliente import Cliente
+from streamlit_elements import elements, mui, html, sync
 from model.controlador import Controlador
 from model.controller_view import Controller_view
 import streamlit as st
+import streamlit.components.v1 as components
 import time as tm
 import pandas as pd
 horizontal_bar = "<hr style='margin-top: 0; margin-bottom: 0; height: 1px; border: 1px solid #635985;'><br>"    # thin divider line
@@ -171,11 +173,104 @@ class View():
 
     # muestra el menu principal -- funcional parcialmente
     def menu_principal(self):
-        # Título de la aplicación
-        st.write("<h1 style='text-align: center;'>Bienvenido a GonzoBoletas</h1>", unsafe_allow_html=True)
-        st.markdown(horizontal_bar, unsafe_allow_html=True)
+        components.html(
+            """
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        * {box-sizing: border-box;}
+        body {font-family: Verdana, sans-serif;}
+        .mySlides {display: none;}
+        img {vertical-align: middle;}
 
-        st.title("¿Que deseas realizar?")
+        /* Slideshow container */
+        .slideshow-container {
+          max-width: 10000px;
+          position: relative;
+          margin: auto;
+        }
+        
+        .active {
+          background-color: #717171;
+        }
+
+        /* Fading animation */
+        .fade {
+          animation-name: fade;
+          animation-duration: 3s;
+        }
+
+        @keyframes fade {
+          from {opacity: .4} 
+          to {opacity: 1}
+        }
+
+        /* On smaller screens, decrease text size */
+        @media only screen and (max-width: 300px) {
+          .text {font-size: 11px}
+        }
+        </style>
+        </head>
+        <body>
+
+        <div class="slideshow-container">
+
+        <div class="mySlides fade">
+          <img src="https://tuboleta.com/imagenes/663e528ca0307.webp" style="width:100%">
+        </div>
+
+        <div class="mySlides fade">
+          <img src="https://tuboleta.com/imagenes/663d952286dbc.webp" style="width:100%">
+        </div>
+
+        <div class="mySlides fade">
+          <img src="https://tuboleta.com/imagenes/663d9522c6735.png" style="width:100%">
+        </div>
+        
+        <div class="mySlides fade">
+          <img src="https://tuboleta.com/imagenes/663e528d086a6.webp" style="width:100%">
+        </div>
+
+        </div>
+        <br>
+
+        <div style="text-align:center">
+          <span class="dot"></span> 
+          <span class="dot"></span> 
+          <span class="dot"></span> 
+        </div>
+
+        <script>
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+          let i;
+          let slides = document.getElementsByClassName("mySlides");
+          let dots = document.getElementsByClassName("dot");
+          for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
+          }
+          slideIndex++;
+          if (slideIndex > slides.length) {slideIndex = 1}    
+          for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+          }
+          slides[slideIndex-1].style.display = "block";  
+          dots[slideIndex-1].className += " active";
+          setTimeout(showSlides, 10000); // Change image every 10 seconds
+        }
+        </script>
+
+        </body>
+        </html> 
+
+            """,
+            height=600,
+        )
+
         # Crea cuatro columnas
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -195,7 +290,6 @@ class View():
             if st.button("Modificar evento"):
                 st.session_state['cont_view'].activate_modificando()
                 st.session_state['cont_view'].desactivate_menu()
-
 
     def tiquetera(self):
         contenedor = st.sidebar.container()
@@ -252,7 +346,7 @@ class View():
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
             st.write("No hay eventos disponibles")
-            st.session_state['cont_view'].deactivate_modificando()
+            st.session_state['cont_view'].desactivate_modificando()
         else:
             nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
             evento_seleccionado = st.selectbox('Selecciona un evento:', nombres_eventos)
@@ -350,7 +444,7 @@ class View():
                       left: 0;
                       bottom: 0;
                       width: 100%;
-                      background-color: #00008b;
+                      background-color: #0071CE;
                       color: white;
                       text-align: center;
                       padding: 10px 0;
