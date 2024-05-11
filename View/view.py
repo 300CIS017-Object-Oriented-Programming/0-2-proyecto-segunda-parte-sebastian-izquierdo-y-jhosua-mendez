@@ -264,7 +264,7 @@ class View():
                     if controller.moficar_estado_evento(evento_seleccionado, estado):
                         st.success("Estado modificado con éxito")
                         tm.sleep(2)
-                        st.session_state['cont_view'].deactivate_modificando()
+                        st.session_state['cont_view'].desactivate_modificando()
                     else:
                         st.error("No se puede modificar el estado de un evento ya realizado")
             # Modificar etapa -- funcional
@@ -274,7 +274,7 @@ class View():
                     if controller.modificar_etapa_evento(evento_seleccionado, etapa):
                         st.success("Etapa modificada con éxito")
                         tm.sleep(2)
-                        st.session_state['cont_view'].deactivate_modificando()
+                        st.session_state['cont_view'].desactivate_modificando()
                     else:
                         st.error("No se pudo modificar la etapa del evento.")
             # Eliminar evento -- funcional
@@ -283,7 +283,7 @@ class View():
                     if controller.eliminar_evento(evento_seleccionado):
                         st.success("Evento eliminado con éxito")
                         tm.sleep(2)
-                        st.session_state['cont_view'].deactivate_modificando()
+                        st.session_state['cont_view'].desactivate_modificando()
                     else:
                         st.error("No se puede eliminar un evento con boletas vendidas")
     def comprar(self, evento_seleccionado, categoria_seleccionada):
@@ -303,12 +303,14 @@ class View():
             comprado = st.form_submit_button("Comprar")
             if comprado:
                 controller = st.session_state['controlador']
-                if controller.comprar_boletas(evento_seleccionado, categoria_seleccionada, cantidad, nombre, apellido, id, telefono, como_se_entero, metodo_pago):
-                    st.success("Boletas compradas con éxito")
+                if controller.disponibilidad(evento_seleccionado, cantidad):
+                    if controller.comprar_boletas(evento_seleccionado, categoria_seleccionada, cantidad, nombre, apellido, id, telefono, como_se_entero, metodo_pago):
+                        st.success("Boletas compradas con éxito")
                 else:
-                    st.error("No se pudo comprar las boletas")
+                    st.error(f"No se pudo concretar la compra con exito, las diponibilidad actual es: {controller.cantidad_disponible(evento_seleccionado)} ")
+                    tm.sleep(3)
                     st.session_state['cont_view'].desactivate_formulario_cliente()
-                    st.session_state['cont_view'].activate_menu()
+                    st.rerun()
 
     def funciones_vista(self):
         # Define el estilo CSS para los botones

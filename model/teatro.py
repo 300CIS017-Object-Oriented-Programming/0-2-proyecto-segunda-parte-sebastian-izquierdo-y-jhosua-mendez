@@ -29,8 +29,8 @@ class Teatro(Evento):
         super().add_utilidad(valor*cantidad_boletas) 
         self._utilidad_tiquetera += valor*comision_tiquetera*cantidad_boletas
         super().modificar_aforo(cantidad_boletas) 
-    def comprar_boletas(self , nombre_categoria , cantidad_boletas):
+    def comprar_boletas(self, nombre_categoria, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago ):
         if super().get_aforo() >= cantidad_boletas:
             self.add_utilidad(self._boleteria.get_precio_categoria(nombre_categoria), cantidad_boletas)
-            self._boleteria.comprar_boleta(nombre_categoria , cantidad_boletas)
+            self._boleteria.comprar_boleta(nombre_categoria, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, self._nombre, self._lugar, self._direccion, self._fecha, self._hora_apertura, self._hora_show)
     

@@ -18,6 +18,7 @@ class Evento():
        self._utilidad = 0
        self._boleteria = Tiqueteria(etapa)
        self._boleteria.agregar_categoria("Cortesia", 0)
+
        # Métodos para obtener los valores de los atributos
 
    def get_nombre(self):
@@ -120,7 +121,8 @@ class Evento():
        return self._boleteria.get_categorias()
    def obtener_precio_categoria(self, nombre_categoria):
        return self._boleteria.get_precio_categoria(nombre_categoria)
-   
+
+
    @abstractmethod
    def comprar_boletas(self):
        pass

@@ -2,6 +2,7 @@ from model.bar import Bar
 from model.teatro import Teatro
 from model.filantropico import Filantropico
 from model.artista import Artista
+from model.boleta import Boleta
 class Controlador:
     def __init__(self):
         self.eventos = []
@@ -87,9 +88,20 @@ class Controlador:
                 return evento.obtener_precio_categoria(categoria_seleccionada)
 
     def comprar_boletas(self, evento_seleccionado, categoria_seleccionada, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago):
+        ans = False
         for evento in self.eventos:
             if evento.get_nombre() == evento_seleccionado:
                 ans = evento.comprar_boletas(categoria_seleccionada, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago)
-            if ans:
-                pass #pdf aqui
         return ans
+    def disponibilidad(self, evento_seleccionado , cantidad_boletas):
+        ans = False
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                if evento.get_aforo() >= cantidad_boletas:
+                    ans = True
+        return ans
+
+    def cantidad_disponible(self, evento_seleccionado):
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                return evento.get_aforo()

@@ -1,4 +1,7 @@
 from model.cliente import Cliente
+import random
+import string
+from model.boleta import Boleta
 
 
 class Tiqueteria():
@@ -7,6 +10,7 @@ class Tiqueteria():
         self._venta_regular = 0
         self._venta_preventa = 0
         self._ingresos_totales = 0
+        self._boletas_vendidas = {}
         self._clientes = []
         self._categoria = {}
         self._cantidad_boletas_efectivo = {}  #tiene el valor de ingresos recaudado por categoria en efectio
@@ -57,20 +61,23 @@ class Tiqueteria():
             valor = self._categoria[nombre_categoria]
             print(f"Categoria: {nombre_categoria} Precio : {valor}")
 
-    def comprar_boleta(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago):
+    def comprar_boleta(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, nombre_evento , lugar_evento , direccion_evento , fecha_evento , hora_apertura , hora_show):
         precio_boleta = self._categoria[nombre_categoria]
+        pago_total = precio_boleta * cantidad_boletas
         if self._etapa == "Preventa":
-            self._venta_preventa += precio_boleta
-            self._ingresos_totales += precio_boleta
+            self._venta_preventa += pago_total
         elif self._etapa == "Regular":
-            self._venta_regular += precio_boleta
-            self._ingresos_totales += precio_boleta
+            self._venta_regular += pago_total
+        self._ingresos_totales += pago_total
         self.agregar_cliente(Cliente(id_cliente, nombre_cliente, apellido_cliente, telefono_cliente, como_se_entero, nombre_categoria, metodo_pago))
         if metodo_pago == "Efectivo":
             self.agregar_boleta_efectivo(nombre_categoria, cantidad_boletas)
         else:
             self.agregar_boleta_tarjeta(nombre_categoria, cantidad_boletas)
-
+        codigo = self.generar_codigo_unico()
+        boleta = Boleta(codigo, nombre_cliente, id_cliente, nombre_evento, lugar_evento, direccion_evento, fecha_evento, hora_apertura, hora_show, cantidad_boletas,pago_total)
+        self._boletas_vendidas[codigo] = boleta
+        boleta.crear_pdf()
     def mostrar_clientes(self):
         print("Reporte de todos los clientes")
         for cliente in self._clientes:
@@ -89,3 +96,14 @@ class Tiqueteria():
         return categorias
     def obtener_precio(self, categoria):
         return self._categoria[categoria]
+
+    def generar_codigo_unico(self):
+        codigo = ""
+        flag = True
+        while flag:
+            letras = ''.join(random.choice(string.ascii_uppercase) for _ in range(3))
+            numeros = ''.join(random.choice(string.digits) for _ in range(3))
+            codigo = letras + numeros
+            if codigo not in self._boletas_vendidas.keys():
+                flag = False
+        return codigo
