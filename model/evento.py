@@ -122,6 +122,8 @@ class Evento():
    def obtener_precio_categoria(self, nombre_categoria):
        return self._boleteria.get_precio_categoria(nombre_categoria)
 
+   def validar_boleta(self, codigo):
+       return self._boleteria.validar_boleta(codigo)
 
    @abstractmethod
    def comprar_boletas(self):

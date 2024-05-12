@@ -105,3 +105,7 @@ class Controlador:
         for evento in self.eventos:
             if evento.get_nombre() == evento_seleccionado:
                 return evento.get_aforo()
+    def validar_boletas(self, evento_seleccionado, codigo):
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                return evento.validar_boleta(codigo)

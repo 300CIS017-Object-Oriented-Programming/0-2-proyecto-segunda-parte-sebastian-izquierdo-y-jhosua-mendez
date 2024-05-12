@@ -107,3 +107,5 @@ class Tiqueteria():
             if codigo not in self._boletas_vendidas.keys():
                 flag = False
         return codigo
+    def validar_boleta(self, codigo):
+        return codigo in self._boletas_vendidas.keys()

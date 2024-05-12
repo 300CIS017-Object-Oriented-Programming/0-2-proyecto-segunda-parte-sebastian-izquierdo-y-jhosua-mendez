@@ -7,7 +7,10 @@ class Controller_view():
         self.reset = False
         self.modificando = False
         self.formulario_cliente = False
+        self.validando = False
 
+    def activate_validando(self):
+        self.validando = True
     def activate_formulario_cliente(self):
         self.formulario_cliente = True
     def activate_menu(self):
@@ -23,6 +26,8 @@ class Controller_view():
     def activate_modificando(self):
         self.modificando = True
 
+    def desactivate_validando(self):
+        self.validando = False
     def desactivate_formulario_cliente(self):
         self.formulario_cliente = False
     def desactivate_menu(self):
@@ -53,3 +58,5 @@ class Controller_view():
         return self.reset
     def get_modificando(self):
         return self.modificando
+    def get_validando(self):
+        return self.validando

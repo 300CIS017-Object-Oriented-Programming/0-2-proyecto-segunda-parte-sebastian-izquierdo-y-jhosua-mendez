@@ -272,7 +272,7 @@ class View():
         )
 
         # Crea cuatro columnas
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4 , col5= st.columns(5)
         with col1:
             if st.button("Crear Evento"):
                 st.session_state['cont_view'].activate_creando_evento()
@@ -290,6 +290,11 @@ class View():
             if st.button("Modificar evento"):
                 st.session_state['cont_view'].activate_modificando()
                 st.session_state['cont_view'].desactivate_menu()
+        with col5:
+            if st.button("Validar ingreso"):
+                st.session_state['cont_view'].activate_validando()
+                st.session_state['cont_view'].desactivate_menu()
+                st.rerun()
 
     def tiquetera(self):
         contenedor = st.sidebar.container()
@@ -436,6 +441,8 @@ class View():
             self.modificar_evento()
         if st.session_state['cont_view'].get_comprando():
             self.tiquetera()
+        if st.session_state['cont_view'].get_validando():
+            self.validar_ingreso()
 
         footer_html = """
               <style>
@@ -456,3 +463,22 @@ class View():
               """
         # Mostrar el footer
         st.markdown(footer_html, unsafe_allow_html=True)
+    def validar_ingreso(self):
+        st.title("Validar ingreso")
+        controller = st.session_state['controlador']
+        if controller.get_tamanio_eventos() == 0:
+            st.error("No hay eventos disponibles")
+
+        else:
+            nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
+            evento_seleccionado = st.selectbox('Selecciona un evento:', nombres_eventos)
+            codigo = st.text_input("Ingrese el código de la boleta:")
+            if st.button("Validar"):
+                if controller.validar_boletas(evento_seleccionado, codigo):
+                    st.success("Entrada valida")
+                else:
+                    st.error("Entrada invalida")
+        if st.button("Volver"):
+            st.session_state['cont_view'].activate_menu()
+            st.session_state['cont_view'].desactivate_validando()
+            st.rerun()
