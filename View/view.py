@@ -62,10 +62,6 @@ class View():
                 if creado2:
                     if st.session_state['controlador'].agregar_artista(nombre):
                         st.sidebar.success("Artista agregado con éxito")
-            if st.sidebar.button("Finalizar"):
-                st.session_state['cont_view'].desactivate_agregando_items()
-                st.session_state['cont_view'].desactivate_creando_evento()
-                st.session_state['cont_view'].activate_menu()
 
 
     # agrega un evento tipo teatro a la lista de eventos -- funcional
@@ -107,10 +103,6 @@ class View():
                     if creado2:
                         if st.session_state['controlador'].agregar_artista(nombre):
                             st.sidebar.success("Artista agregado con éxito")
-            if st.sidebar.button("Finalizar"):
-                st.session_state['cont_view'].desactivate_agregando_items()
-                st.session_state['cont_view'].desactivate_creando_evento()
-                st.session_state['cont_view'].activate_menu()
 
     # agrega un evento tipo filantropico a la lista de eventos -- funcional
     def crear_filantropico(self):
@@ -150,10 +142,6 @@ class View():
                 if creado2:
                     if st.session_state['controlador'].agregar_artista(nombre):
                         st.sidebar.success("Artista agregado con éxito")
-            if st.sidebar.button("Finalizar"):
-                st.session_state['cont_view'].desactivate_agregando_items()
-                st.session_state['cont_view'].desactivate_creando_evento()
-                st.session_state['cont_view'].activate_menu()
 
     # crea un evento -- funcional
     def crear_evento(self):
@@ -163,13 +151,17 @@ class View():
         opcion = {item: st.sidebar.checkbox(item) for item in menu}
         if opcion["Bar"]:
             self.crear_bar()
-            print(st.session_state['cont_view'].get_creando_evento())
 
         if opcion["Teatro"]:
             self.crear_teatro()
 
         if opcion["Filantropico"]:
             self.crear_filantropico()
+        if st.sidebar.button("Volver"):
+            st.session_state['cont_view'].desactivate_agregando_items()
+            st.session_state['cont_view'].desactivate_creando_evento()
+            st.session_state['cont_view'].activate_menu()
+            st.rerun()
 
     # muestra el menu principal -- funcional parcialmente
     def menu_principal(self):
@@ -277,19 +269,24 @@ class View():
             if st.button("Crear Evento"):
                 st.session_state['cont_view'].activate_creando_evento()
                 st.session_state['cont_view'].desactivate_menu()
+                st.rerun()
 
         with col2:
             if st.button("Tiquetera"):
                 st.session_state['cont_view'].activate_comprando()
                 st.session_state['cont_view'].desactivate_menu()
+                st.rerun()
 
         with col3:
             if st.button("Reportes"):
-               pass
+                st.session_state['cont_view'].activate_reportes()
+                st.session_state['cont_view'].desactivate_menu()
+                st.rerun()
         with col4:
             if st.button("Modificar evento"):
                 st.session_state['cont_view'].activate_modificando()
                 st.session_state['cont_view'].desactivate_menu()
+                st.rerun()
         with col5:
             if st.button("Validar ingreso"):
                 st.session_state['cont_view'].activate_validando()
@@ -320,30 +317,30 @@ class View():
                 if contenedor.button("Volver"):
                     st.session_state['cont_view'].activate_menu()
                     st.session_state['cont_view'].desactivate_comprando()
+                    st.rerun()
             if st.session_state['cont_view'].get_formulario_cliente():
                 self.comprar(evento_seleccionado, categoria_seleccionada)
 
     def reportes(self):
-        st.sidebar.title("Bienvenido a los reportes")
-        print("Desea consultar por evento o por artista [1]Evento [2]Artista [3]Salir")
-        opcion = int(input())
-        if opcion == 1:
-            print("Estos son los eventos disponibles a consultar: ")
-            for evento in self._eventos:
-                print(evento.get_nombre())
-            print("Que evento deseas consultar:")
-            nombre_evento = input()
-            print("Que reporte deseas ver [1]Reporte de ventas [2]Reporte financiero [3]Reporte de clientes  [4]Salir")
-        elif opcion == 2:
-            print("Estos son los artistas disponibles a consultar: ")
-            for artista in self._artistas:
-                print(artista)
-            print("Que artista deseas consultar:")
-            nombre_artista = input()
-            for artista in self._artistas:
-                if artista.get_nombre() == nombre_artista:
-                    artista.mostar_eventos()
-        self.menu_principal()
+        st.title("Zona de reportes")
+        col1, col2, col3, col4, col5 = st.columns(5)
+        with col1:
+            if st.button("Reporte de ventas"):
+                self.reporte_ventas()
+        with col2:
+            if st.button("Reporte financiero"):
+                self.reporte_financiero()
+        with col3:
+            if st.button("Reporte de clientes"):
+                self.reporte_clientes()
+        with col4:
+            if st.button("Consultar artista"):
+                self.consultar_artista()
+        with col5:
+            if st.button("Volver"):
+                st.session_state['cont_view'].activate_menu()
+                st.session_state['cont_view'].desactivate_reportes()
+                st.rerun()
 
     # modifica un evento -- funcional
     def modificar_evento(self):
@@ -351,7 +348,7 @@ class View():
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
             st.write("No hay eventos disponibles")
-            st.session_state['cont_view'].desactivate_modificando()
+
         else:
             nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
             evento_seleccionado = st.selectbox('Selecciona un evento:', nombres_eventos)
@@ -362,8 +359,6 @@ class View():
                 if st.button("Modificar"):
                     if controller.moficar_estado_evento(evento_seleccionado, estado):
                         st.success("Estado modificado con éxito")
-                        tm.sleep(2)
-                        st.session_state['cont_view'].desactivate_modificando()
                     else:
                         st.error("No se puede modificar el estado de un evento ya realizado")
             # Modificar etapa -- funcional
@@ -372,8 +367,6 @@ class View():
                 if st.button("Modificar"):
                     if controller.modificar_etapa_evento(evento_seleccionado, etapa):
                         st.success("Etapa modificada con éxito")
-                        tm.sleep(2)
-                        st.session_state['cont_view'].desactivate_modificando()
                     else:
                         st.error("No se pudo modificar la etapa del evento.")
             # Eliminar evento -- funcional
@@ -381,10 +374,13 @@ class View():
                 if st.button("Eliminar"): # Si se presiona el botón
                     if controller.eliminar_evento(evento_seleccionado):
                         st.success("Evento eliminado con éxito")
-                        tm.sleep(2)
-                        st.session_state['cont_view'].desactivate_modificando()
                     else:
                         st.error("No se puede eliminar un evento con boletas vendidas")
+        if st.button("Volver"):
+            st.session_state['cont_view'].desactivate_modificando()
+            st.session_state['cont_view'].activate_menu()
+            st.rerun()
+
     def comprar(self, evento_seleccionado, categoria_seleccionada):
         st.title("Formulario de compra de boletas")
         container = st.container()
@@ -407,9 +403,7 @@ class View():
                         st.success("Boletas compradas con éxito")
                 else:
                     st.error(f"No se pudo concretar la compra con exito, las diponibilidad actual es: {controller.cantidad_disponible(evento_seleccionado)} ")
-                    tm.sleep(3)
-                    st.session_state['cont_view'].desactivate_formulario_cliente()
-                    st.rerun()
+
 
     def funciones_vista(self):
         # Define el estilo CSS para los botones
@@ -443,6 +437,8 @@ class View():
             self.tiquetera()
         if st.session_state['cont_view'].get_validando():
             self.validar_ingreso()
+        if st.session_state['cont_view'].get_reportes():
+            self.reportes()
 
         footer_html = """
               <style>
@@ -475,9 +471,9 @@ class View():
             codigo = st.text_input("Ingrese el código de la boleta:")
             if st.button("Validar"):
                 if controller.validar_boletas(evento_seleccionado, codigo):
-                    st.success("Entrada valida")
+                    st.success("Se registro el ingreso con éxito")
                 else:
-                    st.error("Entrada invalida")
+                    st.error("No se pudo registrar el ingreso")
         if st.button("Volver"):
             st.session_state['cont_view'].activate_menu()
             st.session_state['cont_view'].desactivate_validando()

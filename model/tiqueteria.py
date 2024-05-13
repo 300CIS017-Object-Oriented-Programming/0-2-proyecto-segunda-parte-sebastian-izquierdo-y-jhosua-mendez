@@ -15,6 +15,7 @@ class Tiqueteria():
         self._categoria = {}
         self._cantidad_boletas_efectivo = {}  #tiene el valor de ingresos recaudado por categoria en efectio
         self._cantidad_boletas_tarjeta = {}  #tiene el valor de ingresos recaudado por categoria en tarjeta
+        self._asistencia = 0
 
     def set_etapa(self, etapa):
         self._etapa = etapa
@@ -108,4 +109,9 @@ class Tiqueteria():
                 flag = False
         return codigo
     def validar_boleta(self, codigo):
-        return codigo in self._boletas_vendidas.keys()
+        ans = False
+        if codigo in self._boletas_vendidas.keys():
+            self._boletas_vendidas[codigo].registrar_entrada()
+            ans = True
+            self._asistencia += self._boletas_vendidas[codigo].get_cantidad()
+        return ans
