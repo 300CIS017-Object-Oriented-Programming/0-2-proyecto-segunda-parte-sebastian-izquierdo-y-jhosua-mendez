@@ -125,6 +125,9 @@ class Evento():
    def validar_boleta(self, codigo):
        return self._boleteria.validar_boleta(codigo)
 
+   def add_boletas_vendidas(self, cantidad):
+       self._boletas_vendidas += cantidad
+
    @abstractmethod
    def comprar_boletas(self):
        pass
@@ -132,7 +135,5 @@ class Evento():
        self._boleteria.mostrar_clientes()
    def reporte_financiero(self):
         self._boleteria.reporte_financiero()
-   def reporte_boletas(self):
-       print("reporte venta boletas")
-       print(f"Cantidad de boletas vendidas {self._boletas_vendidas}")
-       self._boleteria.reporte_ventas_boletas()
+   def reporte_venta_boletas(self):
+        return self._boleteria.reporte_ventas_boletas(self._nombre, self._boletas_vendidas)

@@ -13,6 +13,7 @@ class Tiqueteria():
         self._boletas_vendidas = {}
         self._clientes = []
         self._categoria = {}
+        self._cantidad_categorias = {}
         self._cantidad_boletas_efectivo = {}  #tiene el valor de ingresos recaudado por categoria en efectio
         self._cantidad_boletas_tarjeta = {}  #tiene el valor de ingresos recaudado por categoria en tarjeta
         self._asistencia = 0
@@ -27,6 +28,7 @@ class Tiqueteria():
         self._categoria[nombre_categoria] = precio_categoria
         self._cantidad_boletas_efectivo[nombre_categoria] = 0
         self._cantidad_boletas_tarjeta[nombre_categoria] = 0
+        self._cantidad_categorias[nombre_categoria] = 0
 
     def agregar_venta_preventa(self, cantidad):
         self._venta_preventa += cantidad
@@ -65,6 +67,7 @@ class Tiqueteria():
     def comprar_boleta(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, nombre_evento , lugar_evento , direccion_evento , fecha_evento , hora_apertura , hora_show):
         precio_boleta = self._categoria[nombre_categoria]
         pago_total = precio_boleta * cantidad_boletas
+        self._cantidad_categorias[nombre_categoria] += cantidad_boletas
         if self._etapa == "Preventa":
             self._venta_preventa += pago_total
         elif self._etapa == "Regular":
@@ -87,8 +90,19 @@ class Tiqueteria():
     def reporte_financiero(self):
         pass
 
-    def reporte_ventas_boletas(self):
-        pass
+    def reporte_ventas_boletas(self, nombre_evento, boletas_vendidas):
+        ans = "            Reporte de ventas        \n "
+        ans += f"          {nombre_evento}       \n"
+        ans += "Cantidad de boletas vendidas por categoria     \n"
+        for nombre_categoria in self._categoria.keys():
+            ans += f"Categoria: {nombre_categoria} Cantidad de boletas vendidas: {self._cantidad_categorias[nombre_categoria]} \n"
+        ans += f"Total de boletas vendidas: {boletas_vendidas} \n"
+        ans += "     Ingresos     \n"
+        ans += f"Venta en preventa: {self._venta_preventa} \n"
+        ans += f"Venta en regular: {self._venta_regular} \n"
+        ans += f"Ingresos totales: {self._ingresos_totales} \n"
+
+        return ans
 
     def get_categorias(self):
         categorias = []

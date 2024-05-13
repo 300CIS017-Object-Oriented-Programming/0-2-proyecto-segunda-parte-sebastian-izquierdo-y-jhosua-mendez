@@ -39,13 +39,13 @@ class View():
                 hora_apertura = st.time_input("Hora de apertura del evento:")
                 hora_show = st.time_input("Hora del show del evento:")
             with col3:
-                estado = st.selectbox("Estado del evento:",options=["Por realizar","Realizado" , "Cancelado", "Aplazado", "Cerrado"])
+                estado = st.selectbox("Estado del evento:",options=["Por realizar", "Realizado", "Cancelado", "Aplazado", "Cerrado"])
                 aforo = st.number_input("Aforo del evento:", min_value=1)
-                etapa = st.selectbox("Etapa del evento:", options=["PREVENTA", "REGULAR"])
+                etapa = st.selectbox("Etapa del evento:", options=["Preventa", "Regular"])
             creado = st.form_submit_button("Crear evento")
             if creado:
                 if st.session_state['controlador'].crear_bar(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, pago_artistas):
-                    container.success("Evento creado con éxito " )
+                    container.success("Evento creado con éxito ")
                     st.session_state['cont_view'].activate_agregando_items()
 
         if  st.session_state['cont_view'].get_agregando_items():
@@ -82,7 +82,7 @@ class View():
             with col3:
                 estado = st.selectbox("Estado del evento:",options=["Por realizar","Realizado" , "Cancelado", "Aplazado", "Cerrado"])
                 aforo = st.number_input("Aforo del evento:", min_value=1)
-                etapa = st.selectbox("Etapa del evento:", options=["PREVENTA", "REGULAR"])
+                etapa = st.selectbox("Etapa del evento:", options=["Preventa", "Regular"])
             creado = st.form_submit_button("Crear evento")
             if creado:
                 if st.session_state['controlador'].crear_teatro(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, arriendo):
@@ -121,11 +121,11 @@ class View():
             with col3:
                 estado = st.selectbox("Estado del evento:",options=["Por realizar","Realizado", "Cancelado", "Aplazado", "Cerrado"])
                 aforo = st.number_input("Aforo del evento:", min_value=1)
-                etapa = st.selectbox("Etapa del evento:", options=["PREVENTA", "REGULAR"])
+                etapa = st.selectbox("Etapa del evento:", options=["Preventa", "Regular"])
             creado = st.form_submit_button("Crear evento")
             if creado:
                 if st.session_state['controlador'].crear_filantropico(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa):
-                    container.success("Evento creado con éxito " )
+                    container.success("Evento creado con éxito ")
                     st.session_state['cont_view'].activate_agregando_items()
 
         if st.session_state['cont_view'].get_agregando_items():
@@ -478,3 +478,39 @@ class View():
             st.session_state['cont_view'].activate_menu()
             st.session_state['cont_view'].desactivate_validando()
             st.rerun()
+    def reporte_ventas(self):
+        st.sidebar.title("Reporte de ventas")
+        controller = st.session_state['controlador']
+        if controller.get_tamanio_eventos() == 0:
+            st.error("No hay eventos disponibles")
+        else:
+            nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
+            evento_seleccionado = st.sidebar.selectbox('Selecciona un evento:', nombres_eventos)
+            report = controller.reporte_de_ventas(evento_seleccionado)
+            st.sidebar.text(report)
+    def reporte_financiero(self):
+        st.title("Reporte financiero")
+        controller = st.session_state['controlador']
+        if controller.get_tamanio_eventos() == 0:
+            st.error("No hay eventos disponibles")
+        else:
+            nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
+            evento_seleccionado = st.selectbox('Selecciona un evento:', nombres_eventos)
+
+    def reporte_clientes(self):
+        st.title("Reporte de clientes")
+        controller = st.session_state['controlador']
+        if controller.get_tamanio_eventos() == 0:
+            st.error("No hay eventos disponibles")
+        else:
+            nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
+            evento_seleccionado = st.selectbox('Selecciona un evento:', nombres_eventos)
+    def consultar_artista(self):
+        st.title("Consultar artista")
+        controller = st.session_state['controlador']
+        if controller.get_tamanio_eventos() == 0:
+            st.error("No hay Artistas")
+        else:
+            nombres_artistas = [artista for artista in controller.lista_artistas()]
+            artista_seleccionado = st.selectbox('Selecciona un artista:', nombres_artistas)
+            #controller.mostrar_Artistas(artista_seleccionado)

@@ -109,3 +109,14 @@ class Controlador:
         for evento in self.eventos:
             if evento.get_nombre() == evento_seleccionado:
                 return evento.validar_boleta(codigo)
+    def reporte_de_ventas(self, evento_seleccionado):
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                ans = evento.reporte_venta_boletas()
+        return ans
+
+    def lista_artistas(self):
+        artista = []
+        for nombre in self.artistas.keys():
+            artista.append(nombre)
+        return artista

@@ -34,6 +34,7 @@ class Bar(Evento):
     def comprar_boletas(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago):
         ans = False
         if super().get_aforo() >= cantidad_boletas:
+
             self.add_utilidad(self._boleteria.get_precio_categoria(nombre_categoria), cantidad_boletas)
             self._boleteria.comprar_boleta(nombre_categoria, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, self._nombre, self._lugar, self._direccion, self._fecha, self._hora_apertura, self._hora_show)
 
@@ -47,3 +48,4 @@ class Bar(Evento):
         self._utilidad_artista += cantidad_boletas * float(cantidad) * comision_artista
         super().add_utilidad(cantidad_boletas * float(cantidad))
         super().modificar_aforo(cantidad_boletas)
+        super().add_boletas_vendidas(cantidad_boletas)
