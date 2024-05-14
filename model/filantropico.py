@@ -16,3 +16,10 @@ class Filantropico(Evento):
         if super().get_aforo() >= cantidad:
             self._boleteria.comprar_boleta(nombre_categoria, cantidad, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, self._nombre, self._lugar, self._direccion, self._fecha, self._hora_apertura, self._hora_show)
             super().modificar_aforo(cantidad)
+    def obtener_patrocinios(self):
+        ans = []
+        for patrocinio in self._patrocinios.keys():
+            ans.append(patrocinio)
+        return ans
+    def get_patrocinio(self, nombre_patrocinio):
+        return self._patrocinios[nombre_patrocinio]
