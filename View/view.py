@@ -12,6 +12,8 @@ import streamlit as st
 import streamlit.components.v1 as components
 import time as tm
 import pandas as pd
+import plotly.express as px
+import os
 horizontal_bar = "<hr style='margin-top: 0; margin-bottom: 0; height: 1px; border: 1px solid #635985;'><br>"    # thin divider line
 
 class View():
@@ -530,6 +532,29 @@ class View():
         else:
             nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
             evento_seleccionado = st.selectbox('Selecciona un evento:', nombres_eventos)
+            st.text(controller.reporte_clientes_datos_basicos(evento_seleccionado))
+            edades = controller.reporte_clientes_datos_edades(evento_seleccionado)
+            # Convert the dictionary to a DataFrame
+            df = pd.DataFrame(list(edades.items()), columns=['edades', 'N° Clientes'])
+            # Create the bar chart using Plotly
+            fig = px.bar(df, x='edades', y='N° Clientes', title='Distribucion edades de los clientes')
+            # Display the figure in Streamlit
+            st.plotly_chart(fig)
+            tipo_pagos = controller.reporte_clientes_tipo_pago(evento_seleccionado)
+            df = pd.DataFrame(list(tipo_pagos.items()), columns=['Tipo de pago', 'N° Clientes'])
+            fig = px.bar(df, x='Tipo de pago', y='N° Clientes', title='Distribucion tipo de pago de los clientes')
+            st.plotly_chart(fig)
+            categorias = controller.reporte_clientes_preferencia_categoria(evento_seleccionado)
+            df = pd.DataFrame(list(categorias.items()), columns=['Categoria', 'N° Clientes'])
+            fig = px.bar(df, x='Categoria', y='N° Clientes', title='Distribucion de preferencia de categoria de los clientes')
+            st.plotly_chart(fig)
+            if st.button("Generar excel"):
+                controller.generar_excel_clientes(evento_seleccionado)
+
+        if st.button("Cerrar"):
+            st.session_state['cont_view'].desactivate_reporte_clientes()
+            st.rerun()
+
     def consultar_artista(self):
         st.title("Consultar artista")
         controller = st.session_state['controlador']

@@ -12,9 +12,9 @@ class Filantropico(Evento):
     def mostar_patrocinios(self):
         for elemento in self._patrocinios:
             print(f"Patrocinio de {elemento} por el valor:  {self._patrocinios[elemento]}")
-    def comprar_boletas(self , nombre_categoria , cantidad , nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago):
+    def comprar_boletas(self , nombre_categoria , cantidad , nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago,edad):
         if super().get_aforo() >= cantidad:
-            self._boleteria.comprar_boleta(nombre_categoria, cantidad, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, self._nombre, self._lugar, self._direccion, self._fecha, self._hora_apertura, self._hora_show)
+            self._boleteria.comprar_boleta(nombre_categoria, cantidad, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, self._nombre, self._lugar, self._direccion, self._fecha, self._hora_apertura, self._hora_show,edad)
             super().modificar_aforo(cantidad)
     def obtener_patrocinios(self):
         ans = []

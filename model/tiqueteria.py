@@ -2,8 +2,9 @@ from model.cliente import Cliente
 import random
 import string
 from model.boleta import Boleta
-
-
+import pandas as pd
+import os
+import webbrowser
 class Tiqueteria():
     def __init__(self, etapa):
         self._etapa = etapa
@@ -141,7 +142,59 @@ class Tiqueteria():
         return ans
 
     def datos_edades_clientes(self):
-        edades = []
+        edades ={"0-18": 0, "19-30": 0, "31-50": 0, "51-70": 0, "71-100": 0}
         for cliente in self._clientes:
-            edades.append(cliente.get_edad())
+            edad = cliente.get_edad()
+            if edad <= 18:
+                edades["0-18"] += 1
+            elif edad <= 30:
+                edades["19-30"] += 1
+            elif edad <= 50:
+                edades["31-50"] += 1
+            elif edad <= 70:
+                edades["51-70"] += 1
+            else:
+                edades["71-100"] += 1
         return edades
+    def prefrencia_categoria(self):
+        return self._cantidad_categorias
+    def datos_tipo_pago(self):
+        tipo_pago = {}
+        for cliente in self._clientes:
+            pago = cliente.get_pago()
+            if pago not in tipo_pago.keys():
+                tipo_pago[pago] = 1
+            else:
+                tipo_pago[pago] += 1
+        return tipo_pago
+    def datos_basicos(self):
+        ans = ""
+        for cliente in self._clientes:
+            ans += "Nombre: " + cliente.get_nombre() + " " + cliente.get_apellido() + " \n"
+            ans += "telefono: " + cliente.get_telefono() + " \n"
+            ans += "id: " + cliente.get_id() + " \n"
+            ans += "Como se entero: " + cliente.get_como_se_entero() + " \n"
+            ans += " \n"
+        return ans
+    def crear_excel_clientes(self , nombre_evento):
+        # Crear una lista de diccionarios, donde cada diccionario representa un cliente
+        data = []
+        for cliente in self._clientes:
+            data.append({
+                'Nombre': cliente.get_nombre(),
+                'Apellido': cliente.get_apellido(),
+                'ID': cliente.get_id(),
+                'Telefono': cliente.get_telefono(),
+                'Como se entero': cliente.get_como_se_entero(),
+                'Metodo de pago': cliente.get_pago(),
+                'Edad': cliente.get_edad(),
+                'Categoria': cliente.get_categoria()
+            })
+        # Convertir la lista de diccionarios a un DataFrame
+        df = pd.DataFrame(data)
+        name = nombre_evento + ".xlsx"
+        excel_file = 'archivos/' + name
+        df.to_excel(excel_file, index=False)
+        # Abrir la ubicación del archivo en el explorador de archivos
+        webbrowser.open(os.path.realpath(excel_file))
+

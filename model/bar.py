@@ -31,12 +31,12 @@ class Bar(Evento):
     def set_utilidad_artista(self, utilidad_artista):
         self._utilidad_artista = utilidad_artista
 
-    def comprar_boletas(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago):
+    def comprar_boletas(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago,edad):
         ans = False
         if super().get_aforo() >= cantidad_boletas:
 
             self.add_utilidad(self._boleteria.get_precio_categoria(nombre_categoria), cantidad_boletas)
-            self._boleteria.comprar_boleta(nombre_categoria, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, self._nombre, self._lugar, self._direccion, self._fecha, self._hora_apertura, self._hora_show)
+            self._boleteria.comprar_boleta(nombre_categoria, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, self._nombre, self._lugar, self._direccion, self._fecha, self._hora_apertura, self._hora_show,edad)
 
             ans = True
         return ans

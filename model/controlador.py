@@ -94,7 +94,7 @@ class Controlador:
         ans = False
         for evento in self.eventos:
             if evento.get_nombre() == evento_seleccionado:
-                ans = evento.comprar_boletas(categoria_seleccionada, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago)
+                ans = evento.comprar_boletas(categoria_seleccionada, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago,edad)
         return ans
     def disponibilidad(self, evento_seleccionado , cantidad_boletas):
         ans = False
@@ -135,3 +135,27 @@ class Controlador:
                 return evento.get_boleteria()
     def mostrar_eventos(self, artista_seleccionado):
         return self.artistas[artista_seleccionado].mostrar_eventos()
+
+    def reporte_clientes_datos_basicos(self, evento_seleccionado):
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                return evento.get_boleteria().datos_basicos()
+    def reporte_clientes_datos_edades(self, evento_seleccionado):
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                return evento.get_boleteria().datos_edades_clientes()
+    def reporte_clientes_tipo_pago(self, evento_seleccionado):
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                return evento.get_boleteria().datos_tipo_pago()
+    def reporte_clientes_preferencia_categoria(self, evento_seleccionado):
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                return evento.get_boleteria().prefrencia_categoria()
+    def generar_excel_clientes(self, evento_seleccionado):
+        ans = False
+        for evento in self.eventos:
+            if evento.get_nombre() == evento_seleccionado:
+                evento.get_boleteria().crear_excel_clientes(evento_seleccionado)
+                ans= True
+        return ans
