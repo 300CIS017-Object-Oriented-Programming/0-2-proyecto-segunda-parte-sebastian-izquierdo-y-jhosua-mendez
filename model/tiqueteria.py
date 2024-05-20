@@ -14,6 +14,7 @@ class Tiqueteria():
         self._clientes = []
         self._categoria = {}
         self._cantidad_categorias = {}
+        self._cantidad_boletas_transferencia = {}  #tiene el valor de ingresos recaudado por categoria en transferencia
         self._cantidad_boletas_efectivo = {}  #tiene el valor de ingresos recaudado por categoria en efectio
         self._cantidad_boletas_tarjeta = {}  #tiene el valor de ingresos recaudado por categoria en tarjeta
         self._asistencia = 0
@@ -29,6 +30,7 @@ class Tiqueteria():
         self._cantidad_boletas_efectivo[nombre_categoria] = 0
         self._cantidad_boletas_tarjeta[nombre_categoria] = 0
         self._cantidad_categorias[nombre_categoria] = 0
+        self._cantidad_boletas_transferencia[nombre_categoria] = 0
 
     def agregar_venta_preventa(self, cantidad):
         self._venta_preventa += cantidad
@@ -46,6 +48,8 @@ class Tiqueteria():
 
     def agregar_boleta_efectivo(self, categoria, cantidad):
         self._cantidad_boletas_efectivo[categoria] += cantidad
+    def agregar_boleta_transferencia(self, categoria, cantidad):
+        self._cantidad_boletas_transferencia[categoria] += cantidad
 
     def agregar_boleta_tarjeta(self, categoria, cantidad):
         self._cantidad_boletas_tarjeta[categoria] += cantidad
@@ -55,7 +59,11 @@ class Tiqueteria():
 
     def get_cantidad_boletas_tarjeta(self, nombre_categoria):
         return self._cantidad_boletas_tarjeta[nombre_categoria]
+    def get_cantidad_boletas_transferencia(self, nombre_categoria):
+        return self._cantidad_boletas_transferencia[nombre_categoria]
 
+    def get_cantidad_boletas(self, nombre_categoria):
+        return self._cantidad_categorias[nombre_categoria]
     def get_precio_categoria(self, nombre_categoria ):
         return self._categoria[nombre_categoria]
 
@@ -64,7 +72,7 @@ class Tiqueteria():
             valor = self._categoria[nombre_categoria]
             print(f"Categoria: {nombre_categoria} Precio : {valor}")
 
-    def comprar_boleta(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, nombre_evento , lugar_evento , direccion_evento , fecha_evento , hora_apertura , hora_show):
+    def comprar_boleta(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, nombre_evento , lugar_evento , direccion_evento , fecha_evento , hora_apertura , hora_show,edad):
         precio_boleta = self._categoria[nombre_categoria]
         pago_total = precio_boleta * cantidad_boletas
         self._cantidad_categorias[nombre_categoria] += cantidad_boletas
@@ -73,11 +81,13 @@ class Tiqueteria():
         elif self._etapa == "Regular":
             self._venta_regular += pago_total
         self._ingresos_totales += pago_total
-        self.agregar_cliente(Cliente(id_cliente, nombre_cliente, apellido_cliente, telefono_cliente, como_se_entero, nombre_categoria, metodo_pago))
+        self.agregar_cliente(Cliente(id_cliente, nombre_cliente, apellido_cliente, telefono_cliente, como_se_entero, nombre_categoria, metodo_pago, edad))
         if metodo_pago == "Efectivo":
             self.agregar_boleta_efectivo(nombre_categoria, cantidad_boletas)
-        else:
+        elif metodo_pago == "Tarjeta":
             self.agregar_boleta_tarjeta(nombre_categoria, cantidad_boletas)
+        elif metodo_pago == "Transferencia":
+            self.agregar_boleta_transferencia(nombre_categoria, cantidad_boletas)
         codigo = self.generar_codigo_unico()
         boleta = Boleta(codigo, nombre_cliente, id_cliente, nombre_evento, lugar_evento, direccion_evento, fecha_evento, hora_apertura, hora_show, cantidad_boletas,pago_total)
         self._boletas_vendidas[codigo] = boleta
@@ -129,3 +139,9 @@ class Tiqueteria():
             ans = True
             self._asistencia += self._boletas_vendidas[codigo].get_cantidad()
         return ans
+
+    def datos_edades_clientes(self):
+        edades = []
+        for cliente in self._clientes:
+            edades.append(cliente.get_edad())
+        return edades

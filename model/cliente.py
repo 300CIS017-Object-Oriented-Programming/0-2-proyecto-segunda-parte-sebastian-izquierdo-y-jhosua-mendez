@@ -1,6 +1,6 @@
 
 class Cliente():
-    def __init__(self, id, nombre, apellido, telefono,como_se_entero,categoria ,pago):
+    def __init__(self, id, nombre, apellido, telefono,como_se_entero,categoria ,pago, edad):
         self.id = id
         self.nombre = nombre
         self.apellido = apellido
@@ -8,8 +8,11 @@ class Cliente():
         self.como_se_entero = como_se_entero
         self.categoria = categoria
         self.pago = pago
+        self.edad = edad
 
     # Getter para id
+    def get_edad(self):
+        return self.edad
     def get_id(self):
         return self._id
 

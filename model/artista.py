@@ -9,6 +9,12 @@ class Artista():
     def add_evento(self, evento):
         self.eventos.append(evento)
     def mostrar_eventos(self):
-        print(f"Artista {self.nombre_artista} ha participado en estos eventos:")
+        ans = ""
         for evento in self.eventos:
-            print(self.evento.get_nombre())
+            ans += "Evento: " + evento.get_nombre() + "\n"
+            ans += "Fecha: " + str(evento.get_fecha()) + "\n"
+            ans += "Lugar: " + str(evento.get_lugar()) + "\n"
+            ans += "Cantidad boletas vendidas: " + str(evento.get_boletas_vendidas()) + "\n"
+            ans += "aforo: " + str(evento.get_boletas_vendidas() * 100 / (evento.get_aforo() + evento.get_boletas_vendidas())) + "%\n"
+            ans += "\n"
+        return ans

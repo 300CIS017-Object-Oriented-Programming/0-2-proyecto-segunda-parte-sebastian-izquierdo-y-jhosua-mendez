@@ -9,7 +9,19 @@ class Controller_view():
         self.formulario_cliente = False
         self.validando = False
         self.reportes = False
+        self.reporte_ventas = False
+        self.reporte_clientes = False
+        self.reporte_financiero = False
+        self.consulta_artista = False
 
+    def activate_reporte_ventas(self):
+        self.reporte_ventas = True
+    def activate_reporte_clientes(self):
+        self.reporte_clientes = True
+    def activate_reporte_financiero(self):
+        self.reporte_financiero = True
+    def activate_consulta_artista(self):
+        self.consulta_artista = True
     def activate_reportes(self):
         self.reportes = True
     def activate_validando(self):
@@ -29,6 +41,14 @@ class Controller_view():
     def activate_modificando(self):
         self.modificando = True
 
+    def desactivate_reporte_ventas(self):
+        self.reporte_ventas = False
+    def desactivate_reporte_clientes(self):
+        self.reporte_clientes = False
+    def desactivate_reporte_financiero(self):
+        self.reporte_financiero = False
+    def desactivate_consulta_artista(self):
+        self.consulta_artista = False
     def desactivate_reportes(self):
         self.reportes = False
     def desactivate_validando(self):
@@ -67,3 +87,11 @@ class Controller_view():
         return self.modificando
     def get_validando(self):
         return self.validando
+    def get_reporte_ventas(self):
+        return self.reporte_ventas
+    def get_reporte_clientes(self):
+        return self.reporte_clientes
+    def get_reporte_financiero(self):
+        return self.reporte_financiero
+    def get_consulta_artista(self):
+        return self.consulta_artista

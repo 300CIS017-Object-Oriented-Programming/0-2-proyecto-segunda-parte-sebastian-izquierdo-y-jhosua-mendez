@@ -324,23 +324,33 @@ class View():
     def reportes(self):
         st.title("Zona de reportes")
         col1, col2, col3, col4, col5 = st.columns(5)
+        cont_view = st.session_state['cont_view']
         with col1:
             if st.button("Reporte de ventas"):
-                self.reporte_ventas()
+                cont_view.activate_reporte_ventas()
         with col2:
             if st.button("Reporte financiero"):
-                self.reporte_financiero()
+                cont_view.activate_reporte_financiero()
         with col3:
             if st.button("Reporte de clientes"):
-                self.reporte_clientes()
+                cont_view.activate_reporte_clientes()
         with col4:
             if st.button("Consultar artista"):
-                self.consultar_artista()
+                cont_view.activate_consulta_artista()
         with col5:
             if st.button("Volver"):
                 st.session_state['cont_view'].activate_menu()
                 st.session_state['cont_view'].desactivate_reportes()
                 st.rerun()
+        if cont_view.get_reporte_ventas():
+            self.reporte_ventas()
+        if cont_view.get_reporte_financiero():
+            self.reporte_financiero()
+        if cont_view.get_reporte_clientes():
+            self.reporte_clientes()
+        if cont_view.get_consulta_artista():
+            self.consultar_artista()
+
 
     # modifica un evento -- funcional
     def modificar_evento(self):
@@ -394,12 +404,13 @@ class View():
                 como_se_entero = st.text_input("¿Cómo se enteró del evento?")
             with col2:
                 cantidad = st.number_input("Cantidad de boletas:", min_value=1)
-                metodo_pago = st.selectbox("Método de pago:", ["Efectivo", "Tarjeta"])
+                edad = st.number_input("Edad:", min_value=14)
+                metodo_pago = st.radio("Método de pago:", ["Efectivo", "Tarjeta", "Transferencia"])
             comprado = st.form_submit_button("Comprar")
             if comprado:
                 controller = st.session_state['controlador']
                 if controller.disponibilidad(evento_seleccionado, cantidad):
-                    if controller.comprar_boletas(evento_seleccionado, categoria_seleccionada, cantidad, nombre, apellido, id, telefono, como_se_entero, metodo_pago):
+                    if controller.comprar_boletas(evento_seleccionado, categoria_seleccionada, cantidad, nombre, apellido, id, telefono, como_se_entero, metodo_pago,edad):
                         st.success("Boletas compradas con éxito")
                 else:
                     st.error(f"No se pudo concretar la compra con exito, las diponibilidad actual es: {controller.cantidad_disponible(evento_seleccionado)} ")
@@ -479,15 +490,18 @@ class View():
             st.session_state['cont_view'].desactivate_validando()
             st.rerun()
     def reporte_ventas(self):
-        st.sidebar.title("Reporte de ventas")
+        st.title("Reporte de ventas")
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
             st.error("No hay eventos disponibles")
         else:
             nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
-            evento_seleccionado = st.sidebar.selectbox('Selecciona un evento:', nombres_eventos)
+            evento_seleccionado = st.selectbox('Selecciona un evento:', nombres_eventos)
             report = controller.reporte_de_ventas(evento_seleccionado)
-            st.sidebar.text(report)
+            st.text(report)
+        if st.button("Cerrar"):
+            st.session_state['cont_view'].desactivate_reporte_ventas()
+            st.rerun()
     def reporte_financiero(self):
         st.title("Reporte financiero")
         controller = st.session_state['controlador']
@@ -496,7 +510,18 @@ class View():
         else:
             nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
             evento_seleccionado = st.selectbox('Selecciona un evento:', nombres_eventos)
-
+            st.title("Reporte financiero de " + evento_seleccionado)
+            evento = controller.get_evento(evento_seleccionado)
+            tiquet = controller.get_tiqueteria(evento_seleccionado)
+            for ciclo_categoria in tiquet.get_categorias():
+                st.subheader(f"Categoria: {ciclo_categoria}")
+                st.write("Ingresos por Efectivo:" + str(tiquet.get_cantidad_boletas_efectivo(ciclo_categoria)))
+                st.write("Ingresos por Tarjeta:" + str(tiquet.get_cantidad_boletas_tarjeta(ciclo_categoria)))
+                st.write("Ingresos por Transferencia:" + str(tiquet.get_cantidad_boletas_transferencia(ciclo_categoria)))
+                st.write("Ingresos Totales:" + str(tiquet.get_cantidad_boletas(ciclo_categoria)))
+            if st.button("Cerrar"):
+                st.session_state['cont_view'].desactivate_reporte_financiero()
+                st.rerun()
     def reporte_clientes(self):
         st.title("Reporte de clientes")
         controller = st.session_state['controlador']
@@ -513,4 +538,8 @@ class View():
         else:
             nombres_artistas = [artista for artista in controller.lista_artistas()]
             artista_seleccionado = st.selectbox('Selecciona un artista:', nombres_artistas)
-            #controller.mostrar_Artistas(artista_seleccionado)
+            st.title("Eventos en los que ha participado el artista")
+            st.text(controller.mostrar_eventos(artista_seleccionado))
+        if st.button("Cerrar"):
+            st.session_state['cont_view'].desactivate_consulta_artista()
+            st.rerun()

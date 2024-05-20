@@ -18,9 +18,12 @@ class Controlador:
         if len(self.eventos) != 0:
             evento = self.eventos[-1]
             evento.añadir_artista(nombre)
-            artista = Artista(nombre)
-            artista.add_evento(evento)
-            self.artistas[nombre] = artista
+            if nombre in self.artistas:
+                self.artistas[nombre].add_evento(evento)
+            else:
+                artista = Artista(nombre)
+                artista.add_evento(evento)
+                self.artistas[nombre] = artista
             ans = True
         return ans
     def agregar_categoria(self,nombre_categoria,precio):
@@ -87,7 +90,7 @@ class Controlador:
             if evento.get_nombre() == evento_seleccionado:
                 return evento.obtener_precio_categoria(categoria_seleccionada)
 
-    def comprar_boletas(self, evento_seleccionado, categoria_seleccionada, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago):
+    def comprar_boletas(self, evento_seleccionado, categoria_seleccionada, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago,edad):
         ans = False
         for evento in self.eventos:
             if evento.get_nombre() == evento_seleccionado:
@@ -120,3 +123,15 @@ class Controlador:
         for nombre in self.artistas.keys():
             artista.append(nombre)
         return artista
+
+    def get_evento(self, nombre_evento):
+        for evento in self.eventos:
+            if evento.get_nombre() == nombre_evento:
+                return evento
+
+    def get_tiqueteria(self, nombre_evento):
+        for evento in self.eventos:
+            if evento.get_nombre() == nombre_evento:
+                return evento.get_boleteria()
+    def mostrar_eventos(self, artista_seleccionado):
+        return self.artistas[artista_seleccionado].mostrar_eventos()
