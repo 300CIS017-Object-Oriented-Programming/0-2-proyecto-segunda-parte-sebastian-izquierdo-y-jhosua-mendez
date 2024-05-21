@@ -13,6 +13,7 @@ import streamlit.components.v1 as components
 import time as tm
 import pandas as pd
 import plotly.express as px
+from streamlit_extras.stylable_container import stylable_container
 import os
 horizontal_bar = "<hr style='margin-top: 0; margin-bottom: 0; height: 1px; border: 1px solid #635985;'><br>"    # thin divider line
 
@@ -167,6 +168,55 @@ class View():
 
     # muestra el menu principal -- funcional parcialmente
     def menu_principal(self):
+        # Crear un contenedor con la clase 'blue-background'
+        with stylable_container(
+                key="container_with_border",
+                css_styles="""
+                        {
+                            border: 1px solid rgba(49, 51, 63, 0.2);
+                            border-radius: 0.5rem;
+                            padding: calc(1em - 1px);
+                            background-color: #0071CE;
+                        }
+                        """,
+        ):
+            # Crear las columnas dentro del contenedor
+            col1, col2, col3, col4, col5, col6 = st.columns(6)
+
+            with col1:
+                st.markdown(
+                    '<img src="https://www.tuboleta.com/img/ic_logotuboleta.svg" style="width: 230px;" class="header-img">',
+                    unsafe_allow_html=True)
+
+            with col2:
+                if st.button("Crear Evento"):
+                    st.session_state['cont_view'].activate_creando_evento()
+                    st.session_state['cont_view'].desactivate_menu()
+                    st.experimental_rerun()
+
+            with col3:
+                if st.button("Tiquetera"):
+                    st.session_state['cont_view'].activate_comprando()
+                    st.session_state['cont_view'].desactivate_menu()
+                    st.experimental_rerun()
+
+            with col4:
+                if st.button("Reportes"):
+                    st.session_state['cont_view'].activate_reportes()
+                    st.session_state['cont_view'].desactivate_menu()
+                    st.experimental_rerun()
+
+            with col5:
+                if st.button("Modificar evento"):
+                    st.session_state['cont_view'].activate_modificando()
+                    st.session_state['cont_view'].desactivate_menu()
+                    st.experimental_rerun()
+
+            with col6:
+                if st.button("Validar ingreso"):
+                    st.session_state['cont_view'].activate_validando()
+                    st.session_state['cont_view'].desactivate_menu()
+                    st.experimental_rerun()
         components.html(
             """
         <!DOCTYPE html>
@@ -262,54 +312,43 @@ class View():
         </html> 
 
             """,
-            height=600,
-        )
-        st.markdown(
-            """
-            <style>
-            .custom-column {
-                background-color: #0071CE;
-                padding: 10px;
-                border-radius: 5px;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
+            height=500,
         )
 
+        # Dividir el espacio en 4 columnas
+        col11, col21, col31, col41 = st.columns(4)
 
-        # Crea cuatro columnas
-        col1, col2, col3, col4, col5, col6 = st.columns(6)
-        with col1:
-            st.markdown('<img src="https://www.tuboleta.com/img/ic_logotuboleta.svg" class="header-img">', unsafe_allow_html=True)
-        with col2:
-            if st.button("Crear Evento"):
-                st.session_state['cont_view'].activate_creando_evento()
-                st.session_state['cont_view'].desactivate_menu()
-                st.rerun()
+        # En cada columna puedes agregar contenido independiente
+        with col11:
+            st.image("https://img001.prntscr.com/file/img001/lLnshW2vTJ6LEGt4BPQV1g.png", use_column_width=True)
 
-        with col3:
-            if st.button("Tiquetera"):
-                st.session_state['cont_view'].activate_comprando()
-                st.session_state['cont_view'].desactivate_menu()
-                st.rerun()
+        with col21:
+            st.image("https://img001.prntscr.com/file/img001/8mPX8H0WT2yxcvht9YbNVw.png", use_column_width=True)
 
-        with col4:
-            if st.button("Reportes"):
-                st.session_state['cont_view'].activate_reportes()
-                st.session_state['cont_view'].desactivate_menu()
-                st.rerun()
-        with col5:
-            if st.button("Modificar evento"):
-                st.session_state['cont_view'].activate_modificando()
-                st.session_state['cont_view'].desactivate_menu()
-                st.rerun()
-        with col6:
-            if st.button("Validar ingreso"):
-                st.session_state['cont_view'].activate_validando()
-                st.session_state['cont_view'].desactivate_menu()
-                st.rerun()
+        with col31:
+            st.image("https://img001.prntscr.com/file/img001/sRhpaV1wQQmGQE4PC0KM_A.png", use_column_width=True)
+
+        with col41:
+            st.image("https://img001.prntscr.com/file/img001/BuSoqDd_RG663E1VganPcQ.png", use_column_width=True)
+
+        # Dividir el espacio en 4 columnas
+        col12, col22, col32, col42 = st.columns(4)
+
+        # En cada columna puedes agregar contenido independiente
+        with col12:
+            st.image("https://img001.prntscr.com/file/img001/fX6VnsIlT-mU5JbEYlUQyg.png", use_column_width=True)
+
+        with col22:
+            st.image("https://img001.prntscr.com/file/img001/MAJ8Isc0ShCXRfcHmEcorQ.png", use_column_width=True)
+
+        with col32:
+            st.image("https://img001.prntscr.com/file/img001/_ngkqOXWScaqI7SxTl8tMA.png", use_column_width=True)
+
+        with col42:
+            st.image("https://img001.prntscr.com/file/img001/H-F79RDqT0mwJChlIVfFZA.png", use_column_width=True)
+
         self.dash_board()
+
     def tiquetera(self):
         contenedor = st.sidebar.container()
         contenedor.title("Bienvenido a la tiquetera")
@@ -444,13 +483,12 @@ class View():
                            padding: 10px;
                            margin: 10px;
                            border-radius: 10px;
-                           background-color: #00008b;
+                           background-color: #0071CE;
                            color: white;
                        }
                        .stButton>button:hover {
-                           color: #00008b;
-                           background-color: #ffffff;
-                           border: 2px solid #00008b;
+                           font-weight: bold;
+                           font-size: 25px;
                        }
 
                    </style>
