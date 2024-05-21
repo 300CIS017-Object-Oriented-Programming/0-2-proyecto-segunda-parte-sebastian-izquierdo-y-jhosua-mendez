@@ -3,6 +3,7 @@ from model.teatro import Teatro
 from model.filantropico import Filantropico
 from model.artista import Artista
 from model.boleta import Boleta
+from datetime import datetime
 class Controlador:
     def __init__(self):
         self.eventos = []
@@ -157,5 +158,18 @@ class Controlador:
         for evento in self.eventos:
             if evento.get_nombre() == evento_seleccionado:
                 evento.get_boleteria().crear_excel_clientes(evento_seleccionado)
-                ans= True
+                ans = True
         return ans
+
+    def mostrar_eventos_fecha(self,fecha_inicial, fecha_final):
+        eventos = []
+        fecha_inicial = datetime.strptime(fecha_inicial, "%Y-%m-%d")
+        fecha_final = datetime.strptime(fecha_final, "%Y-%m-%d")
+        for evento in self.eventos:
+            fecha = evento.get_fecha()
+            fecha = datetime.strptime(fecha, "%Y-%m-%d")
+            if fecha >= fecha_inicial and fecha <= fecha_final:
+                datos = {"Nombre": evento.get_nombre(),"Fecha": evento.get_fecha(),"Hora apertura": evento.get_hora_apertura(),"Hora show": evento.get_hora_show(),"Estado": evento.get_estado(),"Aforo": evento.get_aforo(),"Etapa": evento.get_etapa()}
+                eventos.append(datos)
+            eventos.sort(key=lambda evento: datetime.strptime(evento['Fecha'], "%Y-%m-%d"))
+        return eventos

@@ -264,37 +264,52 @@ class View():
             """,
             height=600,
         )
+        st.markdown(
+            """
+            <style>
+            .custom-column {
+                background-color: #0071CE;
+                padding: 10px;
+                border-radius: 5px;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+
 
         # Crea cuatro columnas
-        col1, col2, col3, col4 , col5= st.columns(5)
+        col1, col2, col3, col4, col5, col6 = st.columns(6)
         with col1:
+            st.markdown('<img src="https://www.tuboleta.com/img/ic_logotuboleta.svg" class="header-img">', unsafe_allow_html=True)
+        with col2:
             if st.button("Crear Evento"):
                 st.session_state['cont_view'].activate_creando_evento()
                 st.session_state['cont_view'].desactivate_menu()
                 st.rerun()
 
-        with col2:
+        with col3:
             if st.button("Tiquetera"):
                 st.session_state['cont_view'].activate_comprando()
                 st.session_state['cont_view'].desactivate_menu()
                 st.rerun()
 
-        with col3:
+        with col4:
             if st.button("Reportes"):
                 st.session_state['cont_view'].activate_reportes()
                 st.session_state['cont_view'].desactivate_menu()
                 st.rerun()
-        with col4:
+        with col5:
             if st.button("Modificar evento"):
                 st.session_state['cont_view'].activate_modificando()
                 st.session_state['cont_view'].desactivate_menu()
                 st.rerun()
-        with col5:
+        with col6:
             if st.button("Validar ingreso"):
                 st.session_state['cont_view'].activate_validando()
                 st.session_state['cont_view'].desactivate_menu()
                 st.rerun()
-
+        self.dash_board()
     def tiquetera(self):
         contenedor = st.sidebar.container()
         contenedor.title("Bienvenido a la tiquetera")
@@ -568,3 +583,15 @@ class View():
         if st.button("Cerrar"):
             st.session_state['cont_view'].desactivate_consulta_artista()
             st.rerun()
+    def dash_board(self):
+        st.title("Tablero de informacion")
+        col1 , col2 = st.columns(2)
+        controller = st.session_state['controlador']
+        with col1:
+            fecha_inicial = st.date_input("Fecha inicial")
+        with col2:
+            fecha_final = st.date_input("Fecha final")
+        lista = controller.mostrar_eventos_fecha(fecha_inicial, fecha_final)
+        df_eventos = pd.DataFrame(lista)
+        # Mostrar el DataFrame en una tabla en Streamlit
+        st.table(df_eventos)
