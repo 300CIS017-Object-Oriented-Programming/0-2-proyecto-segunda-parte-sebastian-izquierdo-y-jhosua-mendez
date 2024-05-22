@@ -13,6 +13,7 @@ import streamlit.components.v1 as components
 import time as tm
 import pandas as pd
 import plotly.express as px
+from datetime import date
 from streamlit_extras.stylable_container import stylable_container
 import os
 horizontal_bar = "<hr style='margin-top: 0; margin-bottom: 0; height: 1px; border: 1px solid #635985;'><br>"    # thin divider line
@@ -412,7 +413,13 @@ class View():
         with col42:
             st.image("https://img001.prntscr.com/file/img001/H-F79RDqT0mwJChlIVfFZA.png", use_column_width=True)
 
-        self.dash_board()
+        components.html(
+            """
+            """,
+            height=50,
+        )
+
+        self.dashboard()
 
     def tiquetera(self):
         # Sidebar
@@ -738,15 +745,36 @@ class View():
             artista_seleccionado = st.selectbox('Selecciona un artista:', nombres_artistas)
             st.title("Eventos en los que ha participado el artista")
             st.text(controller.mostrar_eventos(artista_seleccionado))
-    def dash_board(self):
-        st.title("Tablero de informacion")
-        col1 , col2 = st.columns(2)
+    def dashboard(self):
         controller = st.session_state['controlador']
+        rounded_image_html = f"""
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <img src="{"https://img001.prntscr.com/file/img001/8XV8AzniROukdr1nk3c2wA.png"}" style="border-radius: 15px; width: 100%; margin-bottom: 50px">
+        </div>
+        """
+
+        # Mostramos la imagen en el contenedor
+        st.markdown(rounded_image_html, unsafe_allow_html=True)
+
+        col1, col2 = st.columns(2)
+
         with col1:
-            fecha_inicial = st.date_input("Fecha inicial")
+            fecha_inicial = st.date_input("Fecha inicial", value=date.today())
         with col2:
-            fecha_final = st.date_input("Fecha final")
-        lista = controller.mostrar_eventos_fecha(fecha_inicial, fecha_final)
-        df_eventos = pd.DataFrame(lista)
-        # Mostrar el DataFrame en una tabla en Streamlit
-        st.table(df_eventos)
+            fecha_final = st.date_input("Fecha final", value=date.today())
+
+        # Validar que las fechas sean correctas
+        if fecha_inicial > fecha_final:
+            st.error("La fecha inicial no puede ser mayor que la fecha final")
+        else:
+            try:
+                lista = controller.mostrar_eventos_fecha(fecha_inicial, fecha_final)
+                df_eventos = pd.DataFrame(lista)
+
+                if df_eventos.empty:
+                    st.warning("No se encontraron eventos en el rango de fechas proporcionado.")
+                else:
+                    # Mostrar el DataFrame en una tabla en Streamlit
+                    st.table(df_eventos)
+            except Exception as e:
+                st.error(f"Ocurrió un error al obtener los eventos: {e}")

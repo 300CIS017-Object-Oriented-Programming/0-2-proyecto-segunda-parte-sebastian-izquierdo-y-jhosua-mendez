@@ -161,15 +161,20 @@ class Controlador:
                 ans = True
         return ans
 
-    def mostrar_eventos_fecha(self,fecha_inicial, fecha_final):
+    def mostrar_eventos_fecha(self, fecha_inicial, fecha_final):
         eventos = []
-        fecha_inicial = datetime.strptime(fecha_inicial, "%Y-%m-%d")
-        fecha_final = datetime.strptime(fecha_final, "%Y-%m-%d")
         for evento in self.eventos:
             fecha = evento.get_fecha()
-            fecha = datetime.strptime(fecha, "%Y-%m-%d")
-            if fecha >= fecha_inicial and fecha <= fecha_final:
-                datos = {"Nombre": evento.get_nombre(),"Fecha": evento.get_fecha(),"Hora apertura": evento.get_hora_apertura(),"Hora show": evento.get_hora_show(),"Estado": evento.get_estado(),"Aforo": evento.get_aforo(),"Etapa": evento.get_etapa()}
+            if fecha_inicial <= fecha <= fecha_final:
+                datos = {
+                    "Nombre": evento.get_nombre(),
+                    "Fecha": fecha.strftime("%Y-%m-%d"),
+                    "Hora apertura": evento.get_hora_apertura(),
+                    "Hora show": evento.get_hora_show(),
+                    "Estado": evento.get_estado(),
+                    "Aforo": evento.get_aforo()
+                }
                 eventos.append(datos)
-            eventos.sort(key=lambda evento: datetime.strptime(evento['Fecha'], "%Y-%m-%d"))
+
+        eventos.sort(key=lambda evento: datetime.strptime(evento['Fecha'], "%Y-%m-%d"))
         return eventos

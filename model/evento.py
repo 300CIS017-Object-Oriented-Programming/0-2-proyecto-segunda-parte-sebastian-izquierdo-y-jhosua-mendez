@@ -2,7 +2,7 @@ from model.tiqueteria import Tiqueteria
 from abc import ABC, abstractmethod
 class Evento():
 
-   def __init__(self,nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo,etapa):
+   def __init__(self,nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo, etapa):
        self._nombre = nombre
        self._lugar = lugar
        self._direccion = direccion
