@@ -36,14 +36,13 @@ class Boleta():
         pdfmetrics.registerFont(TTFont('Arial', 'Arial.ttf'))
 
         # Agregar una imagen
-        logo = "./resource/logo.jpeg"
-        c.drawInlineImage(logo, 5 * inch, height - 2 * inch, width=2 * inch, height=2 * inch)
+        logo = "./resource/banner_boleta.png"
+        c.drawInlineImage(logo, 0, height - (2 * inch), width=width, height=2 * inch)
         # Cambiar el color del texto
         c.setFillColor(HexColor(0x123456))
         # Agregar los detalles de la boleta al PDF
         c.setFont('Helvetica-Bold', 16)
-        c.drawString(3*inch, height - 1*inch, "Boleta de Entrada")
-        c.drawString(1*inch, height - 2*inch, f"ID de la boleta: {self.id_boleta}")
+        c.drawString(1*inch, height - 8*inch, f"ID de la boleta: {self.id_boleta}")
         # Cambiar la fuente y el tamaño del texto
         c.setFont('Helvetica', 12)
         c.drawString(1*inch, height - 3*inch, f"Nombre: {self.nombre_cliente}")
@@ -56,6 +55,8 @@ class Boleta():
         c.drawString(4*inch, height - 6*inch, f"Hora del show: {self.hora_show}")
         c.drawString(1*inch, height - 7*inch, f"Cantidad: {self.cantidad}")
         c.drawString(4*inch, height - 7*inch, f"Total pagado: {self.pago_total}")
+        logo1 = "./resource/qr-code.png"
+        c.drawInlineImage(logo1, width - (2 * inch), height - (10 * inch), width=2 * inch, height=2 * inch)
 
         # Guardar el archivo PDF
         c.save()

@@ -2,7 +2,7 @@ from model.evento import Evento
 
 class Filantropico(Evento):
     def __init__(self,nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo, etapa):
-        super().__init__(nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo, etapa)
+        super().__init__(nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo, etapa, 0)
         self._patrocinios = {}
 
     def agregar_patrocinio(self,nombre,valor):

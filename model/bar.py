@@ -1,8 +1,8 @@
 
 from model.evento import Evento
 class Bar(Evento):
-    def __init__(self,nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo, etapa):
-        super().__init__(nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo , etapa)
+    def __init__(self,nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo, etapa, descuento_preventa):
+        super().__init__(nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo , etapa, descuento_preventa)
         self._pago_artista = 0
         self._utilidad_bar = 0
         self._utilidad_artista = 0
@@ -34,9 +34,13 @@ class Bar(Evento):
     def comprar_boletas(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago,edad):
         ans = False
         if super().get_aforo() >= cantidad_boletas:
-
-            self.add_utilidad(self._boleteria.get_precio_categoria(nombre_categoria), cantidad_boletas)
-            self._boleteria.comprar_boleta(nombre_categoria, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, self._nombre, self._lugar, self._direccion, self._fecha, self._hora_apertura, self._hora_show,edad)
+            precio = self._boleteria.get_precio_categoria(nombre_categoria)
+            if super().get_boleteria().get_etapa() == "Preventa":
+                precio -= super().get_descuento_preventa()
+                if precio < 0:
+                    precio = 0
+            self.add_utilidad(precio, cantidad_boletas)
+            self._boleteria.comprar_boleta(nombre_categoria, cantidad_boletas, nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, self._nombre, self._lugar, self._direccion, self._fecha, self._hora_apertura, self._hora_show, edad, precio)
 
             ans = True
         return ans

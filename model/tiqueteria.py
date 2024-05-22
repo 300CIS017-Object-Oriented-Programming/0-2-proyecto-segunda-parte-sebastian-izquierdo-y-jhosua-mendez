@@ -73,9 +73,8 @@ class Tiqueteria():
             valor = self._categoria[nombre_categoria]
             print(f"Categoria: {nombre_categoria} Precio : {valor}")
 
-    def comprar_boleta(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, nombre_evento , lugar_evento , direccion_evento , fecha_evento , hora_apertura , hora_show,edad):
-        precio_boleta = self._categoria[nombre_categoria]
-        pago_total = precio_boleta * cantidad_boletas
+    def comprar_boleta(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, nombre_evento , lugar_evento , direccion_evento , fecha_evento , hora_apertura , hora_show,edad, precio):
+        pago_total = precio * cantidad_boletas
         self._cantidad_categorias[nombre_categoria] += cantidad_boletas
         if self._etapa == "Preventa":
             self._venta_preventa += pago_total
@@ -197,4 +196,19 @@ class Tiqueteria():
         df.to_excel(excel_file, index=False)
         # Abrir la ubicación del archivo en el explorador de archivos
         webbrowser.open(os.path.realpath(excel_file))
+    def crear_excel_clientes_completo(self):
+        # Crear una lista de diccionarios, donde cada diccionario representa un cliente
+        data = []
+        for cliente in self._clientes:
+            data.append({
+                'Nombre': cliente.get_nombre(),
+                'Apellido': cliente.get_apellido(),
+                'ID': cliente.get_id(),
+                'Telefono': cliente.get_telefono(),
+                'Como se entero': cliente.get_como_se_entero(),
+                'Metodo de pago': cliente.get_pago(),
+                'Edad': cliente.get_edad(),
+                'Categoria': cliente.get_categoria()
+            })
+        return data
 

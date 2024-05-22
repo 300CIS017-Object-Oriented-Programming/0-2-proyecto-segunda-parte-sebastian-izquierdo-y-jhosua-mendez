@@ -2,7 +2,7 @@ from model.tiqueteria import Tiqueteria
 from abc import ABC, abstractmethod
 class Evento():
 
-   def __init__(self,nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo, etapa):
+   def __init__(self,nombre , lugar , direccion , fecha , hora_apertura , hora_show , estado , aforo, etapa, descuento_preventa):
        self._nombre = nombre
        self._lugar = lugar
        self._direccion = direccion
@@ -18,6 +18,7 @@ class Evento():
        self._utilidad = 0
        self._boleteria = Tiqueteria(etapa)
        self._boleteria.agregar_categoria("Cortesia", 0)
+       self.descuento_preventa = descuento_preventa
 
        # Métodos para obtener los valores de los atributos
 
@@ -58,8 +59,9 @@ class Evento():
        return self._utilidad
 
    def get_boleteria(self):
-       return self._boleteria
-
+    return self._boleteria
+   def get_descuento_preventa(self):
+      return self.descuento_preventa
        # Métodos para establecer los valores de los atributos
 
    def set_nombre(self, nombre):
@@ -120,7 +122,12 @@ class Evento():
    def obtener_categorias(self):
        return self._boleteria.get_categorias()
    def obtener_precio_categoria(self, nombre_categoria):
-       return self._boleteria.get_precio_categoria(nombre_categoria)
+       if self.get_boleteria().get_etapa() == "Preventa":
+          precio = self._boleteria.get_precio_categoria(nombre_categoria)
+          precio -= self.get_descuento_preventa()
+          if precio < 0:
+            precio = 0
+       return precio
 
    def validar_boleta(self, codigo):
        return self._boleteria.validar_boleta(codigo)

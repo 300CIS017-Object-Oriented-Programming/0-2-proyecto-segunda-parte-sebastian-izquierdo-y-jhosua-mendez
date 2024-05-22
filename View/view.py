@@ -42,6 +42,7 @@ class View():
                 fecha = st.date_input("Fecha del evento:")
                 hora_apertura = st.time_input("Hora de apertura del evento:")
                 hora_show = st.time_input("Hora del show del evento:")
+                descuento_preventa = st.number_input("Descuento preventa:", min_value=0)
             with col3:
                 estado = st.selectbox("Estado del evento:",options=["Por realizar", "Realizado", "Cancelado", "Aplazado", "Cerrado"])
                 aforo = st.number_input("Aforo del evento:", min_value=1)
@@ -49,7 +50,7 @@ class View():
             creado = st.form_submit_button("Crear evento")
             if creado:
                 if nombre and lugar and direccion and fecha and hora_apertura and hora_show and estado and aforo and etapa and pago_artistas:
-                    if st.session_state['controlador'].crear_bar(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, pago_artistas):
+                    if st.session_state['controlador'].crear_bar(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, pago_artistas, descuento_preventa):
                         container.success("Evento creado con éxito ")
                         st.session_state['cont_view'].activate_agregando_items()
                 else:
@@ -92,6 +93,7 @@ class View():
                 fecha = st.date_input("Fecha del evento:")
                 hora_apertura = st.time_input("Hora de apertura del evento:")
                 hora_show = st.time_input("Hora del show del evento:")
+                descuento_preventa = st.number_input("Descuento preventa:", min_value=0)
             with col3:
                 estado = st.selectbox("Estado del evento:",options=["Por realizar","Realizado" , "Cancelado", "Aplazado", "Cerrado"])
                 aforo = st.number_input("Aforo del evento:", min_value=1)
@@ -99,7 +101,7 @@ class View():
             creado = st.form_submit_button("Crear evento")
             if creado:
                 if nombre and lugar and direccion and fecha and hora_apertura and hora_show and estado and aforo and etapa and arriendo:
-                    if st.session_state['controlador'].crear_teatro(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, arriendo):
+                    if st.session_state['controlador'].crear_teatro(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, arriendo, descuento_preventa):
                         container.success("Evento creado con éxito ")
                         st.session_state['cont_view'].activate_agregando_items()
                 else:
@@ -519,6 +521,10 @@ class View():
             if st.button("Volver"):
                 st.session_state['cont_view'].activate_menu()
                 st.session_state['cont_view'].desactivate_reportes()
+                cont_view.desactivate_reporte_ventas()
+                cont_view.desactivate_reporte_clientes()
+                cont_view.desactivate_reporte_financiero()
+                cont_view.desactivate_consulta_artista()
                 st.rerun()
         if cont_view.get_reporte_ventas():
             self.reporte_ventas()
@@ -732,8 +738,10 @@ class View():
             df = pd.DataFrame(list(categorias.items()), columns=['Categoria', 'N° Clientes'])
             fig = px.bar(df, x='Categoria', y='N° Clientes', title='Distribucion de preferencia de categoria de los clientes')
             st.plotly_chart(fig)
-            if st.button("Generar excel"):
+            if st.button("Generar Excel"):
                 controller.generar_excel_clientes(evento_seleccionado)
+            if st.button("Generar Excel de Todos los Eventos"):
+                controller.generar_excel_clientes_todos()
 
     def consultar_artista(self):
         st.title("Consultar Artista 🎙️")

@@ -4,13 +4,16 @@ from model.filantropico import Filantropico
 from model.artista import Artista
 from model.boleta import Boleta
 from datetime import datetime
+import webbrowser
+import pandas as pd
+import os
 class Controlador:
     def __init__(self):
         self.eventos = []
         self.artistas = {}
 
-    def crear_bar(self,nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa,pago_artistas):
-        evento = Bar(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa)
+    def crear_bar(self,nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa,pago_artistas, descuento_preventa):
+        evento = Bar(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, descuento_preventa)
         evento.set_pago_artista(pago_artistas)
         self.eventos.append(evento)
         return True
@@ -34,8 +37,8 @@ class Controlador:
             evento.añadir_categoria(nombre_categoria,precio)
             ans = True
         return ans
-    def crear_teatro(self,nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa,arriendo):
-        evento = Teatro(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa,arriendo)
+    def crear_teatro(self,nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa,arriendo, descuento_preventa):
+        evento = Teatro(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa,arriendo, descuento_preventa)
         evento.set_arriendo(arriendo)
         self.eventos.append(evento)
         return True
@@ -172,9 +175,22 @@ class Controlador:
                     "Hora apertura": evento.get_hora_apertura(),
                     "Hora show": evento.get_hora_show(),
                     "Estado": evento.get_estado(),
+                    "Etapa": evento.get_boleteria().get_etapa(),
                     "Aforo": evento.get_aforo()
                 }
                 eventos.append(datos)
 
         eventos.sort(key=lambda evento: datetime.strptime(evento['Fecha'], "%Y-%m-%d"))
         return eventos
+
+    def generar_excel_clientes_todos(self):
+        lista_final = []
+        for evento in self.eventos:
+            lista_final += evento.get_boleteria().crear_excel_clientes_completo()
+        # Convertir la lista de diccionarios a un DataFrame
+        df = pd.DataFrame(lista_final)
+        name = "base_de_datos_general" + ".xlsx"
+        excel_file = 'archivos/' + name
+        df.to_excel(excel_file, index=False)
+        # Abrir la ubicación del archivo en el explorador de archivos
+        webbrowser.open(os.path.realpath(excel_file))
