@@ -13,6 +13,8 @@ class Controller_view():
         self.reporte_clientes = False
         self.reporte_financiero = False
         self.consulta_artista = False
+        self.crear_evento_pagina = False
+        self.tiqueteria_pagina = False
 
     def activate_reporte_ventas(self):
         self.reporte_ventas = True
@@ -40,6 +42,10 @@ class Controller_view():
         self.reset = True
     def activate_modificando(self):
         self.modificando = True
+    def activate_crear_evento_pagina(self):
+        self.crear_evento_pagina = True
+    def activate_tiqueteria_pagina(self):
+        self.tiqueteria_pagina = True
 
     def desactivate_reporte_ventas(self):
         self.reporte_ventas = False
@@ -67,7 +73,10 @@ class Controller_view():
         self.reset = False
     def desactivate_modificando(self):
         self.modificando = False
-
+    def desactivate_crear_evento_pagina(self):
+        self.crear_evento_pagina = False
+    def desactivate_tiqueteria_pagina(self):
+        self.tiqueteria_pagina = False
 
     def get_reportes(self):
         return self.reportes
@@ -95,3 +104,7 @@ class Controller_view():
         return self.reporte_financiero
     def get_consulta_artista(self):
         return self.consulta_artista
+    def get_crear_evento_pagina(self):
+        return self.crear_evento_pagina
+    def get_tiqueteria_pagina(self):
+        return self.tiqueteria_pagina

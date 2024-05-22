@@ -47,9 +47,12 @@ class View():
                 etapa = st.selectbox("Etapa del evento:", options=["Preventa", "Regular"])
             creado = st.form_submit_button("Crear evento")
             if creado:
-                if st.session_state['controlador'].crear_bar(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, pago_artistas):
-                    container.success("Evento creado con éxito ")
-                    st.session_state['cont_view'].activate_agregando_items()
+                if nombre and lugar and direccion and fecha and hora_apertura and hora_show and estado and aforo and etapa and pago_artistas:
+                    if st.session_state['controlador'].crear_bar(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, pago_artistas):
+                        container.success("Evento creado con éxito ")
+                        st.session_state['cont_view'].activate_agregando_items()
+                else:
+                    st.error("Por favor llene todos los campos")
 
         if  st.session_state['cont_view'].get_agregando_items():
             with st.sidebar.form("agregar_categoria"):
@@ -57,15 +60,21 @@ class View():
                 precio = st.number_input("Precio de la categoria:", min_value=0)
                 creado1 = st.form_submit_button("Agregar categoria")
                 if creado1:
-                    if st.session_state['controlador'].agregar_categoria(nombre, precio):
-                        st.sidebar.success("Categoria agregada con éxito")
+                    if nombre and precio:
+                        if st.session_state['controlador'].agregar_categoria(nombre, precio):
+                            st.sidebar.success("Categoria agregada con éxito")
+                    else:
+                        st.error("Por favor llene todos los campos")
+
             with st.sidebar.form("agregar_artista"):
                 nombre = st.text_input("Nombre del artista:")
                 creado2 = st.form_submit_button("Agregar artista")
                 if creado2:
-                    if st.session_state['controlador'].agregar_artista(nombre):
-                        st.sidebar.success("Artista agregado con éxito")
-
+                    if nombre:
+                        if st.session_state['controlador'].agregar_artista(nombre):
+                            st.sidebar.success("Artista agregado con éxito")
+                    else:
+                        st.error("Por favor llene todos los campos")
 
     # agrega un evento tipo teatro a la lista de eventos -- funcional
     def crear_teatro(self):
@@ -88,9 +97,12 @@ class View():
                 etapa = st.selectbox("Etapa del evento:", options=["Preventa", "Regular"])
             creado = st.form_submit_button("Crear evento")
             if creado:
-                if st.session_state['controlador'].crear_teatro(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, arriendo):
-                    container.success("Evento creado con éxito ")
-                    st.session_state['cont_view'].activate_agregando_items()
+                if nombre and lugar and direccion and fecha and hora_apertura and hora_show and estado and aforo and etapa and arriendo:
+                    if st.session_state['controlador'].crear_teatro(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa, arriendo):
+                        container.success("Evento creado con éxito ")
+                        st.session_state['cont_view'].activate_agregando_items()
+                else:
+                    st.error("Por favor llene todos los campos")
 
         if st.session_state['cont_view'].get_agregando_items():
             with st.sidebar.form("agregar_categoria"):
@@ -98,14 +110,20 @@ class View():
                 precio = st.number_input("Precio de la categoria:", min_value=0)
                 creado1 = st.form_submit_button("Agregar categoria")
                 if creado1:
-                    if st.session_state['controlador'].agregar_categoria(nombre, precio):
-                        st.sidebar.success("Categoria agregada con éxito")
+                    if nombre and precio:
+                        if st.session_state['controlador'].agregar_categoria(nombre, precio):
+                            st.sidebar.success("Categoria agregada con éxito")
+                    else:
+                        st.error("Por favor llene todos los campos")
                 with st.sidebar.form("agregar_artista"):
                     nombre = st.text_input("Nombre del artista:")
                     creado2 = st.form_submit_button("Agregar artista")
                     if creado2:
-                        if st.session_state['controlador'].agregar_artista(nombre):
-                            st.sidebar.success("Artista agregado con éxito")
+                        if nombre:
+                            if st.session_state['controlador'].agregar_artista(nombre):
+                                st.sidebar.success("Artista agregado con éxito")
+                        else:
+                            st.error("Por favor llene todos los campos")
 
     # agrega un evento tipo filantropico a la lista de eventos -- funcional
     def crear_filantropico(self):
@@ -127,44 +145,84 @@ class View():
                 etapa = st.selectbox("Etapa del evento:", options=["Preventa", "Regular"])
             creado = st.form_submit_button("Crear evento")
             if creado:
-                if st.session_state['controlador'].crear_filantropico(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa):
-                    container.success("Evento creado con éxito ")
-                    st.session_state['cont_view'].activate_agregando_items()
-
+                if nombre and lugar and direccion and fecha and hora_apertura and hora_show and estado and aforo and etapa:
+                    if st.session_state['controlador'].crear_filantropico(nombre, lugar, direccion, fecha, hora_apertura, hora_show, estado, aforo, etapa):
+                        container.success("Evento creado con éxito ")
+                        st.session_state['cont_view'].activate_agregando_items()
+                else:
+                    st.error("Por favor llene todos los campos")
         if st.session_state['cont_view'].get_agregando_items():
             with st.sidebar.form("agregar_patrocinio"):
                 nombre = st.text_input("Nombre del patrocinador:")
                 valor = st.number_input("Valor del patrocinio:", min_value=0)
                 creado1 = st.form_submit_button("Agregar patrocinio")
                 if creado1:
-                    if st.session_state['controlador'].agregar_patrocinio(nombre, valor):
-                        st.sidebar.success("Patrocinio agregado con éxito")
+                    if nombre and valor:
+                        if st.session_state['controlador'].agregar_patrocinio(nombre, valor):
+                            st.sidebar.success("Patrocinio agregado con éxito")
+                    else:
+                        st.error("Por favor llene todos los campos")
             with st.sidebar.form("agregar_artista"):
                 nombre = st.text_input("Nombre del artista:")
                 creado2 = st.form_submit_button("Agregar artista")
                 if creado2:
-                    if st.session_state['controlador'].agregar_artista(nombre):
-                        st.sidebar.success("Artista agregado con éxito")
+                    if nombre:
+                        if st.session_state['controlador'].agregar_artista(nombre):
+                            st.sidebar.success("Artista agregado con éxito")
+                    else:
+                        st.error("Por favor llene todos los campos")
 
     # crea un evento -- funcional
     def crear_evento(self):
-        st.sidebar.title("Bienvenido a la creacion de eventos")
-        st.sidebar.write("Elige el tipo de evento que deseas realizar: ")
-        menu = ["Bar", "Teatro", "Filantropico"]
-        opcion = {item: st.sidebar.checkbox(item) for item in menu}
-        if opcion["Bar"]:
+        cont_view = st.session_state['cont_view']
+        #Sidebar
+        rounded_image_html = f"""
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <img src="{"https://img001.prntscr.com/file/img001/uXUflxGISjWRIjH2sE4Qtg.png"}" style="border-radius: 15px; width: 100%; margin-bottom: 25px">
+                </div>
+                """
+
+        # Mostramos la imagen en el contenedor
+        st.sidebar.markdown(rounded_image_html, unsafe_allow_html=True)
+        genre = st.sidebar.radio("Selecciona el tipo de evento:", ["Bar", "Teatro", "Filantropico"], index=None)
+        if genre:
+            cont_view.desactivate_crear_evento_pagina()
+        if genre == "Bar":
+            st.session_state['cont_view'].desactivate_crear_evento_pagina()
             self.crear_bar()
 
-        if opcion["Teatro"]:
+        if genre == "Teatro":
+            st.session_state['cont_view'].desactivate_crear_evento_pagina()
             self.crear_teatro()
 
-        if opcion["Filantropico"]:
+        if genre == "Filantropico":
+            st.session_state['cont_view'].desactivate_crear_evento_pagina()
             self.crear_filantropico()
+
         if st.sidebar.button("Volver"):
             st.session_state['cont_view'].desactivate_agregando_items()
             st.session_state['cont_view'].desactivate_creando_evento()
             st.session_state['cont_view'].activate_menu()
+            st.session_state['cont_view'].desactivate_crear_evento_pagina()
             st.rerun()
+        # Página
+
+        if cont_view.get_crear_evento_pagina():
+            st.markdown(
+                """
+                <style>
+                .stApp {
+                    background-color: #0071CE;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
+
+            with st.title("Hola"):
+                st.title("Bienvenido a la creacion de eventos")
+                st.image("https://img001.prntscr.com/file/img001/JmNmgn5dRHeKRvu1AqnhcA.png", use_column_width=True)
+
 
     # muestra el menu principal -- funcional parcialmente
     def menu_principal(self):
@@ -191,11 +249,13 @@ class View():
             with col2:
                 if st.button("Crear Evento"):
                     st.session_state['cont_view'].activate_creando_evento()
+                    st.session_state['cont_view'].activate_crear_evento_pagina()
                     st.session_state['cont_view'].desactivate_menu()
                     st.experimental_rerun()
 
             with col3:
                 if st.button("Tiquetera"):
+                    st.session_state['cont_view'].activate_tiqueteria_pagina()
                     st.session_state['cont_view'].activate_comprando()
                     st.session_state['cont_view'].desactivate_menu()
                     st.experimental_rerun()
@@ -312,7 +372,7 @@ class View():
         </html> 
 
             """,
-            height=500,
+            height=650,
         )
 
         # Dividir el espacio en 4 columnas
@@ -331,6 +391,11 @@ class View():
         with col41:
             st.image("https://img001.prntscr.com/file/img001/BuSoqDd_RG663E1VganPcQ.png", use_column_width=True)
 
+        components.html(
+            """
+            """,
+            height=25,
+        )
         # Dividir el espacio en 4 columnas
         col12, col22, col32, col42 = st.columns(4)
 
@@ -350,8 +415,16 @@ class View():
         self.dash_board()
 
     def tiquetera(self):
+        # Sidebar
         contenedor = st.sidebar.container()
-        contenedor.title("Bienvenido a la tiquetera")
+        rounded_image_html = f"""
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <img src="{"https://img001.prntscr.com/file/img001/IUlSufvZTuWtKoR876hPog.png"}" style="border-radius: 15px; width: 100%; margin-bottom: 50px">
+        </div>
+        """
+
+        # Mostramos la imagen en el contenedor
+        contenedor.markdown(rounded_image_html, unsafe_allow_html=True)
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
             contenedor.write("No hay eventos disponibles")
@@ -364,34 +437,76 @@ class View():
             cartegorias = [categoria for categoria in controller.mostrar_boletas(evento_seleccionado)]
             categoria_seleccionada = contenedor.selectbox('Selecciona una categoria:', cartegorias)
             valor = controller.precio_categoria(evento_seleccionado, categoria_seleccionada)
-            contenedor.write(f"El precio de la categoria seleccionada es: {valor} ")
+            contenedor.write(f"El precio de la categoria seleccionada es: ${valor} ")
             col1 , col2 = contenedor.columns(2)
             with col1:
                 if contenedor.button("Comprar boletas"):
                     st.session_state['cont_view'].activate_formulario_cliente()
+                    st.session_state['cont_view'].desactivate_tiqueteria_pagina()
+
             with col2:
-                if contenedor.button("Volver"):
-                    st.session_state['cont_view'].activate_menu()
-                    st.session_state['cont_view'].desactivate_comprando()
-                    st.rerun()
-            if st.session_state['cont_view'].get_formulario_cliente():
+                # this does not show, just to make some space for the columns
+                print(".")
+            if st.session_state['cont_view'].get_formulario_cliente() and not st.session_state['cont_view'].get_tiqueteria_pagina():
                 self.comprar(evento_seleccionado, categoria_seleccionada)
+        if contenedor.button("Volver"):
+            st.session_state['cont_view'].activate_menu()
+            st.session_state['cont_view'].desactivate_comprando()
+            st.session_state['cont_view'].desactivate_tiqueteria_pagina()
+            st.rerun()
+        # Página
+
+        if st.session_state['cont_view'].get_tiqueteria_pagina():
+            st.markdown(
+                """
+                <style>
+                .stApp {
+                    background-color: #0071CE;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
+
+            with st.title("Hola"):
+                st.title("Bienvenido a la creacion de eventos")
+                st.image("https://img001.prntscr.com/file/img001/WnnxdVPZRF2Uf7Gcb0Zb4g.png", use_column_width=True)
 
     def reportes(self):
-        st.title("Zona de reportes")
+        rounded_image_html = f"""
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <img src="{"https://img001.prntscr.com/file/img001/tAMoOhUCRIutX1fXeaHR5Q.png"}" style="border-radius: 15px; width: 100%; margin-bottom: 50px">
+        </div>
+        """
+
+        # Mostramos la imagen en el contenedor
+        st.markdown(rounded_image_html, unsafe_allow_html=True)
         col1, col2, col3, col4, col5 = st.columns(5)
         cont_view = st.session_state['cont_view']
         with col1:
             if st.button("Reporte de ventas"):
                 cont_view.activate_reporte_ventas()
+                cont_view.desactivate_reporte_financiero()
+                cont_view.desactivate_reporte_clientes()
+                cont_view.desactivate_consulta_artista()
+
         with col2:
             if st.button("Reporte financiero"):
+                cont_view.desactivate_reporte_ventas()
+                cont_view.desactivate_reporte_clientes()
+                cont_view.desactivate_consulta_artista()
                 cont_view.activate_reporte_financiero()
         with col3:
             if st.button("Reporte de clientes"):
                 cont_view.activate_reporte_clientes()
+                cont_view.desactivate_reporte_ventas()
+                cont_view.desactivate_consulta_artista()
+                cont_view.desactivate_reporte_financiero()
         with col4:
             if st.button("Consultar artista"):
+                cont_view.desactivate_reporte_ventas()
+                cont_view.desactivate_reporte_clientes()
+                cont_view.desactivate_reporte_financiero()
                 cont_view.activate_consulta_artista()
         with col5:
             if st.button("Volver"):
@@ -410,10 +525,17 @@ class View():
 
     # modifica un evento -- funcional
     def modificar_evento(self):
-        st.title("Eventos Disponibles:")
+        rounded_image_html = f"""
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <img src="{"https://img001.prntscr.com/file/img001/NS6RMqhRRXSpvXqB7EHHpw.png"}" style="border-radius: 15px; width: 100%; margin-bottom: 50px">
+        </div>
+        """
+
+        # Mostramos la imagen en el contenedor
+        st.markdown(rounded_image_html, unsafe_allow_html=True)
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
-            st.write("No hay eventos disponibles")
+            st.error("No hay eventos disponibles")
 
         else:
             nombres_eventos = [evento.get_nombre() for evento in controller.lista_eventos()]
@@ -440,6 +562,7 @@ class View():
                 if st.button("Eliminar"): # Si se presiona el botón
                     if controller.eliminar_evento(evento_seleccionado):
                         st.success("Evento eliminado con éxito")
+                        st.rerun()
                     else:
                         st.error("No se puede eliminar un evento con boletas vendidas")
         if st.button("Volver"):
@@ -526,7 +649,14 @@ class View():
         # Mostrar el footer
         st.markdown(footer_html, unsafe_allow_html=True)
     def validar_ingreso(self):
-        st.title("Validar ingreso")
+        rounded_image_html = f"""
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <img src="{"https://img001.prntscr.com/file/img001/fFVaTSwIRsW0kUJbpAmmDQ.png"}" style="border-radius: 15px; width: 100%; margin-bottom: 50px">
+        </div>
+        """
+
+        # Mostramos la imagen en el contenedor
+        st.markdown(rounded_image_html, unsafe_allow_html=True)
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
             st.error("No hay eventos disponibles")
@@ -545,7 +675,7 @@ class View():
             st.session_state['cont_view'].desactivate_validando()
             st.rerun()
     def reporte_ventas(self):
-        st.title("Reporte de ventas")
+        st.title("Reporte de Ventas 🛒")
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
             st.error("No hay eventos disponibles")
@@ -554,11 +684,8 @@ class View():
             evento_seleccionado = st.selectbox('Selecciona un evento:', nombres_eventos)
             report = controller.reporte_de_ventas(evento_seleccionado)
             st.text(report)
-        if st.button("Cerrar"):
-            st.session_state['cont_view'].desactivate_reporte_ventas()
-            st.rerun()
     def reporte_financiero(self):
-        st.title("Reporte financiero")
+        st.title("Reporte Financiero 📈")
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
             st.error("No hay eventos disponibles")
@@ -574,11 +701,8 @@ class View():
                 st.write("Ingresos por Tarjeta:" + str(tiquet.get_cantidad_boletas_tarjeta(ciclo_categoria)))
                 st.write("Ingresos por Transferencia:" + str(tiquet.get_cantidad_boletas_transferencia(ciclo_categoria)))
                 st.write("Ingresos Totales:" + str(tiquet.get_cantidad_boletas(ciclo_categoria)))
-            if st.button("Cerrar"):
-                st.session_state['cont_view'].desactivate_reporte_financiero()
-                st.rerun()
     def reporte_clientes(self):
-        st.title("Reporte de clientes")
+        st.title("Reporte de Clientes 👥")
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
             st.error("No hay eventos disponibles")
@@ -604,23 +728,16 @@ class View():
             if st.button("Generar excel"):
                 controller.generar_excel_clientes(evento_seleccionado)
 
-        if st.button("Cerrar"):
-            st.session_state['cont_view'].desactivate_reporte_clientes()
-            st.rerun()
-
     def consultar_artista(self):
-        st.title("Consultar artista")
+        st.title("Consultar Artista 🎙️")
         controller = st.session_state['controlador']
         if controller.get_tamanio_eventos() == 0:
-            st.error("No hay Artistas")
+            st.error("No hay artistas disponibles")
         else:
             nombres_artistas = [artista for artista in controller.lista_artistas()]
             artista_seleccionado = st.selectbox('Selecciona un artista:', nombres_artistas)
             st.title("Eventos en los que ha participado el artista")
             st.text(controller.mostrar_eventos(artista_seleccionado))
-        if st.button("Cerrar"):
-            st.session_state['cont_view'].desactivate_consulta_artista()
-            st.rerun()
     def dash_board(self):
         st.title("Tablero de informacion")
         col1 , col2 = st.columns(2)
