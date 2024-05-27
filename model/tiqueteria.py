@@ -74,6 +74,8 @@ class Tiqueteria():
             print(f"Categoria: {nombre_categoria} Precio : {valor}")
 
     def comprar_boleta(self, nombre_categoria, cantidad_boletas,nombre_cliente, apellido_cliente, id_cliente, telefono_cliente, como_se_entero, metodo_pago, nombre_evento , lugar_evento , direccion_evento , fecha_evento , hora_apertura , hora_show,edad, precio):
+        if self._etapa == "Preventa":
+            pago_total = (precio - descu)
         pago_total = precio * cantidad_boletas
         self._cantidad_categorias[nombre_categoria] += cantidad_boletas
         if self._etapa == "Preventa":
