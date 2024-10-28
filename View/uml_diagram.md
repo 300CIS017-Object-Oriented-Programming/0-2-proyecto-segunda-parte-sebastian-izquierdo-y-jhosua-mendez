@@ -1,5 +1,6 @@
+```mermaid  
 classDiagram
-    class View {
+class View {
         +crear_bar() void
         +crear_teatro() void
         +crear_filantropico() void
@@ -240,3 +241,4 @@ Evento --> Tiqueteria : tiene
 
 Tiqueteria --> Cliente : coleccion
 Tiqueteria --> Boleta : coleccion
+```
